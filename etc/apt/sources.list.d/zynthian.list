@@ -1,0 +1,4 @@
+# Stable
+#deb http://os.zynthian.org:8090/zynthian-stable buster main
+# Testing
+deb http://os.zynthian.org:8090/zynthian-testing buster main

@@ -1,5 +1,6 @@
 
 aptpkgs=""
+upgrade_aptpkgs=""
 
 # 2020-05-19 => mutagen, for audio/mid file metadata (updated 2021-03-20)
 if $ZYNTHIAN_SYS_DIR/scripts/is_python_module_installed.py mutagen; then
@@ -149,9 +150,22 @@ fi
 systemctl unmask polkit
 systemctl unmask packagekit
 
+# 2021-05-20: Install zynthian repository & public key
+if [ ! -f "/etc/apt/sources.list.d/zynthian.list" ]; then
+	apt-key add $ZYNTHIAN_SYS_DIR/etc/apt/pubkeys/zynthian.pub
+	cp -a $ZYNTHIAN_SYS_DIR/etc/apt/sources.list.d/* /etc/apt/sources.list.d
+fi
+
+# 2021-05-20: Upgrade alsa-utils to 1.2.4
+res=`dpkg -s alsa-utils 2>&1 | grep "Version:"`
+if [[ "$res" < "1.2.4-1.1" ]]; then
+	upgrade_aptpkgs="$upgrade_aptpkgs alsa-utils"
+fi
 
 # Install needed apt packages 
 if [ ! -z "$aptpkgs" ]; then
 	apt-get -y update
+	apt-get -y upgrade $upgrade_aptpkgs
 	apt-get -y install $aptpkgs
 fi
+
