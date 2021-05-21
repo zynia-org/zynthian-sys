@@ -157,7 +157,7 @@ fi
 
 # 2021-05-20: Upgrade alsa-utils to 1.2.4
 res=`dpkg -s alsa-utils 2>&1 | grep "Version:"`
-if [[ "$res" < "Version: 1.2.4-1.1" ]]; then
+if [[ "$res" < "Version: 1.2.4" ]]; then
 	aptpkgs="$aptpkgs alsa-utils"
 fi
 
