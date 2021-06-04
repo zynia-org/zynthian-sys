@@ -140,9 +140,10 @@ if [ ! -d "$ZYNTHIAN_PLUGINS_SRC_DIR/mod-cabsim-IR-loader" ]; then
 	$ZYNTHIAN_RECIPE_DIR/install_mod-cabsim-IR-loader.sh
 fi
 
-# 2021-03-31: Install riban LV2 plugins
-if [ ! -e "$ZYNTHIAN_PLUGINS_DIR/lv2/riban.lv2" ]; then
-	$ZYNTHIAN_RECIPE_DIR/install_riban_lv2.sh
+# 2021-03-31: Install riban LV2 plugins modifed 2021-06-04
+res=`dpkg -s riban-lv2 2>&1 | grep "Version:"`
+if [[ "$res" < "Version: 1.0.0" ]]; then
+	aptpkgs="$aptpkgs riban-lv2"
 fi
 
 # 2021-05-18: Unmask polkit & packagekit services
