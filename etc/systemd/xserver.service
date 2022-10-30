@@ -1,0 +1,11 @@
+# /etc/systemd/system/xinit.service
+
+[Unit]
+Description=X server
+
+[Service]
+ExecStart=/usr/bin/X -nolisten tcp vt7
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target
