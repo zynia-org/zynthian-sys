@@ -1,11 +1,13 @@
-# /etc/systemd/system/xinit.service
+# /etc/systemd/system/xserver.service
 
 [Unit]
 Description=X server
 
 [Service]
-ExecStart=/usr/bin/X -nolisten tcp vt7
+ExecStart=/usr/bin/X :0 -nolisten tcp -dpms -s 0 -v -novtswitch vt7
 StandardOutput=syslog
+SuccessAction=xloadimage -display :0 -fullscreen -onroot #ZYNTHIAN_CONFIG_DIR#/img/fb_zynthian_message.png
+FailureAction=/usr/bin/fbi -noverbose -vt 7  #ZYNTHIAN_CONFIG_DIR#/img/fb_zynthian_error.png
 
 [Install]
 WantedBy=multi-user.target
