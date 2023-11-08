@@ -1,0 +1,12 @@
+export ZYNTHIAN_DIR=/zynthian
+export ZYNTHIAN_SYS_DIR="$ZYNTHIAN_DIR/zynthian-sys"
+export ZYNTHIAN_SW_DIR=/"${ZYNTHIAN_DIR}"/zynthian-sw
+export ZYNTHIAN_CONFIG_DIR=/"${ZYNTHIAN_DIR}"/config
+export ZYNTHIAN_SYS_REPO="https://github.com/zynthian/zynthian-sys.git"
+export ZYNTHIAN_SYS_BRANCH="stable"
+export ZYNTHIAN_DATA_DIR=/"${ZYNTHIAN_DIR}"/zynthian-data
+export ZYNTHIAN_ZYNCODER_BRANCH="stable"
+export ZYNTHIAN_ZYNCODER_REPO="https://github.com/zynthian/zyncoder.git"
+export ZYNTHIAN_UI_REPO="https://github.com/zynthian/zynthian-ui.git"
+export ZYNTHIAN_UI_BRANCH="stable"
+export ZYNTHIAN_RECIPE_DIR="$ZYNTHIAN_SYS_DIR/scripts/recipes"

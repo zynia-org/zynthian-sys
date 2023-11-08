@@ -97,7 +97,7 @@ function custom_config {
 }
 
 
-function display_custom_config {
+[Bfunction display_custom_config {
 	custom_config "$1"
 
 	calibration_fpath="$ZYNTHIAN_CONFIG_DIR/touchscreen/$DISPLAY_NAME"
@@ -193,6 +193,9 @@ fi
 # Boot Config 
 #------------------------------------------------------------------------------
 
+# FGH 2023-11-07 Comment out boot stuff for Zynia for now
+if [ -z "${ZYNIA}" ]; then 
+
 # Detect NO_ZYNTHIAN_UPDATE flag in the config.txt
 if [ -f "/boot/config.txt" ] && [ -z "$NO_ZYNTHIAN_UPDATE" ]; then
 	NO_ZYNTHIAN_UPDATE=`grep -e ^#NO_ZYNTHIAN_UPDATE /boot/config.txt`
@@ -261,6 +264,10 @@ fi
 if [ -d "$ZYNTHIAN_SYS_DIR/boot/overlays" ]; then
 	cp -a $ZYNTHIAN_SYS_DIR/boot/overlays/* /boot/overlays
 fi
+
+# if [ -z "${ZYNIA}" ]; then ...
+fi
+
 
 #------------------------------------------------------------------------------
 # Zynthian Config 
