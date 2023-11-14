@@ -22,6 +22,9 @@
 # For a full copy of the GNU General Public License see the LICENSE.txt file.
 # ****************************************************************************
 
+set -x
+
+
 #------------------------------------------------------------------------------
 # Load Environment Variables
 #------------------------------------------------------------------------------
@@ -97,7 +100,7 @@ function custom_config {
 }
 
 
-[Bfunction display_custom_config {
+function display_custom_config {
 	custom_config "$1"
 
 	calibration_fpath="$ZYNTHIAN_CONFIG_DIR/touchscreen/$DISPLAY_NAME"

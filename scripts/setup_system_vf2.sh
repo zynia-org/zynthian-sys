@@ -350,30 +350,25 @@ systemctl disable wpa_supplicant
 # Error: Unit file dnsmasq.service does npot exist
 systemctl disable unattended-upgrades
 systemctl disable apt-daily.timer
-#systemctl mask packagekit
-#systemctl mask polkit
-#systemctl disable serial-getty@ttyAMA0.service
+systemctl mask packagekit
+systemctl mask polkit
+systemctl disable serial-getty@ttyAMA0.service
 #systemctl disable sys-devices-platform-soc-3f201000.uart-tty-ttyAMA0.device
-# systemctl enable backlight
-# Error: Unit file backlight.service does not exist
-# systemctl enable cpu-performance
-# Error: Unit file cpu-performance.service does not exist
-# systemctl enable splash-screen
-# Error: Unit file splash-screen.service does not exist
-# systemctl enable wifi-setup
-# Error: Unit file wifi-setup.service does not exist
-# systemctl enable jack2
-# Error: Unit file jack2.service does not exist
-# systemctl enable mod-ttymidi
-# Error: Unit file mod-ttymidi.service does not exist
-# 2023-07-26 a2jmimid not loaded -- systemctl enable a2jmidid
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Here
-
+# Error: Failed to disable unit: Unit file sys-devices-platform-soc-3f201000.uart-tty-ttyAMA0.device does not exist.
+systemctl enable backlight
+systemctl enable cpu-performance
+systemctl enable splash-screen
+systemctl enable wifi-setup
+systemctl enable jack2
+systemctl enable mod-ttymidi
+systemctl enable a2jmidid
 
 systemctl enable zynthian
 systemctl enable zynthian-webconf
 systemctl enable zynthian-config-on-boot
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Here
+
 
 # Setup loading of Zynthian Environment variables ...
 echo "source $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh" >> /root/.bashrc

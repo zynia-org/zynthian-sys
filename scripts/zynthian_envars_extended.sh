@@ -20,7 +20,7 @@
 #
 # For a full copy of the GNU General Public License see the LICENSE.txt file.
 # ****************************************************************************
-
+#set -x
 #------------------------------------------------------------------------------
 # Load Standard Environment Variables
 #------------------------------------------------------------------------------
@@ -55,6 +55,7 @@ export ZYNTHIAN_EXTENDED_ENVARS_DEFINED=1
 export LINUX_OS_VERSION=$(lsb_release -cs)
 export LINUX_KERNEL_VERSION=$(uname -r)
 export ZYNTHIAN_OS_VERSION=$(cat /etc/zynthianos_version)
+if [ -z "${ZYNTHIAN_OS_VERSION}" ]; then export ZYNTHIAN_OS_VERSION="2306"; fi
 if [ -z "$VIRTUALIZATION" ]; then
 	export VIRTUALIZATION=$(systemd-detect-virt)
 fi
