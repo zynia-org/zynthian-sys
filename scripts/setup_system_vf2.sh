@@ -367,13 +367,12 @@ systemctl enable zynthian
 systemctl enable zynthian-webconf
 systemctl enable zynthian-config-on-boot
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Here
-
-
 # Setup loading of Zynthian Environment variables ...
 echo "source $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh" >> /root/.bashrc
 # => Shell & Login Config
 echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
+
+
 
 # On first boot, resize SD partition, regenerate keys, etc.
 $ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
@@ -386,7 +385,8 @@ $ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
 #************************************************
 
 # Install some extra packages:
-apt-get -y install jack-midi-clock midisport-firmware
+apt-get -y install jack-midi-clock 
+# ERROR midisport-firmware package not found
 
 # Install Jack2
 $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
@@ -395,7 +395,8 @@ $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
 #$ZYNTHIAN_RECIPE_DIR/install_alsaseq.sh
 
 # Install NTK library
-$ZYNTHIAN_RECIPE_DIR/install_ntk.sh
+# $ZYNTHIAN_RECIPE_DIR/install_ntk.sh
+# ERROR: cannot find fltk git repo.  When fltk github repo used instead, then build fails cause can't find ./waf
 
 # Install pyliblo library (liblo OSC library for Python)
 $ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
@@ -405,6 +406,9 @@ $ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
 
 # Install LV2 lilv library
 $ZYNTHIAN_RECIPE_DIR/install_lv2_lilv.sh
+# Warning: need to install Meson and Ninja in root for this to work
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Here
 
 # Install the LV2 C++ Tool Kit
 $ZYNTHIAN_RECIPE_DIR/install_lvtk.sh
