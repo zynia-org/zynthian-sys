@@ -43,21 +43,101 @@ mkdir $ZYNTHIAN_PLUGINS_SRC_DIR
 # surge => Fails from repo. Install our own binary.
 # avw.lv2
 
-apt-get -y install abgate adlplug amsynth ams-lv2 arctican-plugins-lv2 artyfx avldrums.lv2 
-apt-get -y install bchoppr beatslash-lv2 blop-lv2 bsequencer boops bshapr bslizr
-apt-get -y install calf-plugins caps-lv2 cv-lfo-blender-lv2
-apt-get -y install drumkv1-lv2 samplv1-lv2 synthv1-lv2 padthv1-lv2
-apt-get -y install distrho-plugin-ports-lv2 dpf-plugins dragonfly-reverb drmr drowaudio-plugins-lv2 drumgizmo
-apt-get -y install easyssp-lv2 eq10q fabla g2reverb geonkick gxplugins gxvoxtonebender
-apt-get -y install helm hybridreverb2 infamous-plugins invada-studio-plugins-lv2 juced-plugins-lv2 juce-opl-lv2
-apt-get -y install klangfalter-lv2 lsp-plugins lufsmeter-lv2 luftikus-lv2 lv2vocoder
-apt-get -y install mod-cv-plugins mod-distortion mod-pitchshifter mod-utilities moony.lv2
-apt-get -y install noise-repellent obxd-lv2 oxefmsynth pitcheddelay-lv2 pizmidi-plugins
-apt-get -y install regrader riban-lv2 rubberband-lv2 safe-plugins shiro-plugins sorcer
-apt-get -y install temper-lv2 tal-plugins-lv2 tap-lv2 teragonaudio-plugins-lv2 vitalium-lv2
-apt-get -y install wolf-shaper wolf-spectrum wolpertinger-lv2
-apt-get -y install x42-plugins zam-plugins zlfo
+apt-get -y install abgate amsynth avldrums.lv2
+# Errors
+#E: Unable to locate package adlplug
+#E: Unable to locate package ams-lv2
+#E: Unable to locate package arctican-plugins-lv2
+#E: Unable to locate package artyfx
 
+apt-get -y install blop-lv2
+# Errors
+#E: Unable to locate package bchoppr
+#E: Unable to locate package beatslash-lv2
+#E: Unable to locate package bsequencer
+#E: Unable to locate package boops
+#E: Unable to locate package bshapr
+#E: Unable to locate package bslizr
+
+apt-get -y install calf-plugins
+# Errors
+#E: Unable to locate package caps-lv2
+#E: Unable to locate package cv-lfo-blender-lv2
+
+apt-get -y install drumkv1-lv2 samplv1-lv2 synthv1-lv2 padthv1-lv2
+
+apt-get -y install dpf-plugins dragonfly-reverb
+# Errors
+#E: Unable to locate package distrho-plugin-ports-lv2
+#E: Unable to locate package drmr
+#E: Unable to locate package drowaudio-plugins-lv2
+
+apt-get -y install eq10q
+# Errors
+#E: Unable to locate package easyssp-lv2
+#E: Unable to locate package fabla
+#E: Unable to locate package g2reverb
+#E: Unable to locate package geonkick
+#E: Unable to locate package gxplugins
+#E: Unable to locate package gxvoxtonebender
+
+apt-get -y install invada-studio-plugins-lv2
+# Errors
+#E: Unable to locate package helm
+#E: Unable to locate package hybridreverb2
+#E: Unable to locate package infamous-plugins
+#E: Unable to locate package juced-plugins-lv2
+#E: Unable to locate package juce-opl-lv2
+
+apt-get -y install lsp-plugins lv2vocoder
+# Errors
+#E: Unable to locate package klangfalter-lv2
+#E: Unable to locate package lufsmeter-lv2
+#E: Unable to locate package luftikus-lv2
+
+#apt-get -y install 
+# Errrors
+#E: Unable to locate package mod-cv-plugins
+#E: Unable to locate package mod-distortion
+#E: Unable to locate package mod-pitchshifter
+#E: Unable to locate package mod-utilities
+#E: Unable to locate package moony.lv2
+#E: Couldn't find any package by glob 'moony.lv2'
+#E: Couldn't find any package by regex 'moony.lv2'
+
+#apt-get -y install
+# Errors
+#E: Unable to locate package noise-repellent
+#E: Unable to locate package obxd-lv2
+#E: Unable to locate package oxefmsynth
+#E: Unable to locate package pitcheddelay-lv2
+#E: Unable to locate package pizmidi-plugins
+
+apt-get -y install rubberband-lv2
+# Errors
+#E: Unable to locate package regrader
+#E: Unable to locate package riban-lv2
+#E: Unable to locate package safe-plugins
+#E: Unable to locate package shiro-plugins
+#E: Unable to locate package sorcer
+
+#apt-get -y install
+# Errors
+#E: Unable to locate package temper-lv2
+#E: Unable to locate package tal-plugins-lv2
+#E: Unable to locate package tap-lv2
+#E: Unable to locate package teragonaudio-plugins-lv2
+#E: Unable to locate package vitalium-lv2
+
+#apt-get -y install 
+# Errors
+#E: Unable to locate package wolf-shaper
+#E: Unable to locate package wolf-spectrum
+#E: Unable to locate package wolpertinger-lv2
+
+apt-get -y install x42-plugins zam-plugins
+# Errors
+#E: Unable to locate package zlfo
 #------------------------------------------------
 # Install LV2 Plugins from source code
 #------------------------------------------------
@@ -75,7 +155,10 @@ $ZYNTHIAN_RECIPE_DIR/install_fluidplug.sh
 #$ZYNTHIAN_RECIPE_DIR/install_amsynth.sh
 $ZYNTHIAN_RECIPE_DIR/install_sooperlooper-lv2-plugin.sh
 $ZYNTHIAN_RECIPE_DIR/install_sosynth.sh
-$ZYNTHIAN_RECIPE_DIR/install_guitarix.sh
+
+#$ZYNTHIAN_RECIPE_DIR/install_guitarix.sh
+# Error multiple compoile erros
+
 $ZYNTHIAN_RECIPE_DIR/install_gxswitchlesswah.sh
 $ZYNTHIAN_RECIPE_DIR/install_gxdenoiser2.sh
 $ZYNTHIAN_RECIPE_DIR/install_gxdistortionplus.sh
@@ -86,7 +169,10 @@ $ZYNTHIAN_RECIPE_DIR/install_gxdistortionplus.sh
 #$ZYNTHIAN_RECIPE_DIR/install_padthv1.sh
 #$ZYNTHIAN_RECIPE_DIR/install_distrho_ports.sh
 #$ZYNTHIAN_RECIPE_DIR/install_dpf_plugins.sh
-$ZYNTHIAN_RECIPE_DIR/install_foo-yc20.sh
+
+#$ZYNTHIAN_RECIPE_DIR/install_foo-yc20.sh
+# Error: compile fails to complete
+
 $ZYNTHIAN_RECIPE_DIR/install_raffo.sh
 $ZYNTHIAN_RECIPE_DIR/install_triceratops.sh
 $ZYNTHIAN_RECIPE_DIR/install_swh.sh
@@ -109,7 +195,10 @@ $ZYNTHIAN_RECIPE_DIR/install_miniopl3.sh
 $ZYNTHIAN_RECIPE_DIR/install_ykchorus.sh
 $ZYNTHIAN_RECIPE_DIR/install_gula.sh
 #$ZYNTHIAN_RECIPE_DIR/install_arpeggiator.sh
-$ZYNTHIAN_RECIPE_DIR/install_mod-arpeggiator.sh
+
+#$ZYNTHIAN_RECIPE_DIR/install_mod-arpeggiator.sh
+# Error cc1plus: error: unknown cpu ‘generic’ for ‘-mtune’
+
 $ZYNTHIAN_RECIPE_DIR/install_stereo-mixer.sh
 $ZYNTHIAN_RECIPE_DIR/install_surge_prebuilt.sh
 $ZYNTHIAN_RECIPE_DIR/install_alo.sh
@@ -131,9 +220,10 @@ $ZYNTHIAN_RECIPE_DIR/install_mclk.sh
 
 # Zynthian precompiled plugins
 $ZYNTHIAN_RECIPE_DIR/install_lv2_plugins_prebuilt.sh
+# Error: rpi only?????
 
 # Fixup amsynth bank/presets
-$ZYNTHIAN_RECIPE_DIR/fixup_amsynth.sh
+#$ZYNTHIAN_RECIPE_DIR/fixup_amsynth.sh
+# Error /fixup_amsynth.sh: line 3: cd: /usr/lib/arm-linux-gnueabihf/lv2/amsynth.lv2: No such file or directory1
 
-# Install MOD-UI skins
 #$ZYNTHIAN_RECIPE_DIR/postinstall_mod-lv2-data.sh

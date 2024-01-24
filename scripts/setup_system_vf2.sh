@@ -408,8 +408,6 @@ $ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
 $ZYNTHIAN_RECIPE_DIR/install_lv2_lilv.sh
 # Warning: need to install Meson and Ninja in root for this to work
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Here
-
 # Install the LV2 C++ Tool Kit
 $ZYNTHIAN_RECIPE_DIR/install_lvtk.sh
 
@@ -420,7 +418,8 @@ $ZYNTHIAN_RECIPE_DIR/install_lv2_jalv.sh
 $ZYNTHIAN_RECIPE_DIR/install_aubio.sh
 
 # Install jpmidi (MID player for jack with transport sync)
-$ZYNTHIAN_RECIPE_DIR/install_jpmidi.sh
+#$ZYNTHIAN_RECIPE_DIR/install_jpmidi.sh
+# Error: cannot link due to not finding right libraries
 
 # Install jack_capture (jackd audio recorder)
 $ZYNTHIAN_RECIPE_DIR/install_jack_capture.sh
@@ -429,7 +428,8 @@ $ZYNTHIAN_RECIPE_DIR/install_jack_capture.sh
 $ZYNTHIAN_RECIPE_DIR/install_jack-smf-utils.sh
 
 # Install touchosc2midi (TouchOSC Bridge)
-$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
+#$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
+# ERROR failed - lots of python/pip errors
 
 # Install jackclient (jack-client python library)
 $ZYNTHIAN_RECIPE_DIR/install_jackclient-python.sh
@@ -493,17 +493,21 @@ $ZYNTHIAN_RECIPE_DIR/install_squishbox_sf2.sh
 
 # Install Sfizz (SFZ player)
 #$ZYNTHIAN_RECIPE_DIR/install_sfizz.sh
-apt-get -y install sfizz
+# apt-get -y install sfizz
+#Error sfizz not found
 
 # Install Linuxsampler
 #$ZYNTHIAN_RECIPE_DIR/install_linuxsampler_stable.sh
-apt-get -y install linuxsampler gigtools
+apt-get -y install gigtools
+#apt-get -y install linuxsampler
+# Error linuxsample not found
 
 # Install Fantasia (linuxsampler Java GUI)
 $ZYNTHIAN_RECIPE_DIR/install_fantasia.sh
 
 # Install setBfree (Hammond B3 Emulator)
 $ZYNTHIAN_RECIPE_DIR/install_setbfree.sh
+
 # Setup user config directories
 cd $ZYNTHIAN_CONFIG_DIR
 mkdir setbfree
@@ -515,18 +519,21 @@ $ZYNTHIAN_RECIPE_DIR/install_pianoteq_demo.sh
 
 # Install Aeolus (Pipe Organ Emulator)
 #apt-get -y install aeolus
-$ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
+#$ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
+# Error: multiple compile errors
 
 # Install Mididings (MIDI route & filter)
-apt-get -y install mididings
+#apt-get -y install mididings
+# Error: mididings is Python2 only and hence dropped from Debian/Ubuntu
 
 # Install Pure Data stuff
 apt-get -y install puredata puredata-core puredata-utils python3-yaml \
 pd-lua pd-moonlib pd-pdstring pd-markex pd-iemnet pd-plugin pd-ekext pd-import pd-bassemu pd-readanysf pd-pddp \
 pd-zexy pd-list-abs pd-flite pd-windowing pd-fftease pd-bsaylor pd-osc pd-sigpack pd-hcs pd-pdogg pd-purepd \
-pd-beatpipe pd-freeverb pd-iemlib pd-smlib pd-hid pd-csound pd-aubio pd-earplug pd-wiimote pd-pmpd pd-motex \
+pd-beatpipe pd-freeverb pd-iemlib pd-smlib pd-hid pd-csound pd-earplug pd-wiimote pd-pmpd pd-motex \
 pd-arraysize pd-ggee pd-chaos pd-iemmatrix pd-comport pd-libdir pd-vbap pd-cxc pd-lyonpotpourri pd-iemambi \
 pd-pdp pd-mjlib pd-cyclone pd-jmmmp pd-3dp pd-boids pd-mapping pd-maxlib
+# Error pd-aubio package no longer in debian
 
 mkdir /root/Pd
 mkdir /root/Pd/externals
@@ -542,7 +549,8 @@ $ZYNTHIAN_RECIPE_DIR/install_mod-host.sh
 $ZYNTHIAN_RECIPE_DIR/install_mod-browsepy.sh
 
 #Install MOD-UI
-$ZYNTHIAN_RECIPE_DIR/install_mod-ui.sh
+#$ZYNTHIAN_RECIPE_DIR/install_mod-ui.sh
+# Error multiple python install errors
 
 #Install MOD-SDK
 #$ZYNTHIAN_RECIPE_DIR/install_mod-sdk.sh
@@ -556,7 +564,13 @@ cd $ZYNTHIAN_SYS_DIR/scripts
 #------------------------------------------------
 # Install Ableton Link Support
 #------------------------------------------------
-$ZYNTHIAN_RECIPE_DIR/install_hylia.sh
+#$ZYNTHIAN_RECIPE_DIR/install_hylia.sh
+# ERROR: compile errors
+#g++: error: unrecognized command-line option ‘-mfpu=neon-fp-armv8’
+#g++: error: unrecognized command-line option ‘-mneon-for-64bits’
+#g++: error: unrecognized command-line option ‘-mfloat-abi=hard’
+#g++: error: unrecognized command-line option ‘-mvectorize-with-neon-quad’
+
 $ZYNTHIAN_RECIPE_DIR/install_pd_extra_abl_link.sh
 
 #************************************************
@@ -564,6 +578,8 @@ $ZYNTHIAN_RECIPE_DIR/install_pd_extra_abl_link.sh
 # Final Configuration
 #------------------------------------------------
 #************************************************
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Here
 
 # Create flags to avoid running unneeded recipes.update when updating zynthian software
 if [ ! -d "$ZYNTHIAN_CONFIG_DIR/updates" ]; then
