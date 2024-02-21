@@ -158,15 +158,17 @@ if [ -z "$BROWSEPY_ROOT" ]; then
 fi
 
 #Check for EPDF Hat
-/zynthian/zynthian-sys/scripts/epdf_detect.sh 
-ZYNTHIAN_EPDF_HAT=$?
+#/zynthian/zynthian-sys/scripts/epdf_detect.sh 
+#ZYNTHIAN_EPDF_HAT=$?
+# 2024-02-20 No HATs for now on vf2
+
 
 #Configure the ACT_LED if an EPDF hat is detected
-if [ $ZYNTHIAN_EPDF_HAT -eq 0 ]; then
-	export ACT_LED_CONFIG="dtoverlay=act-led,activelow=off,gpio=4\n\n"     
-else
-	export ACT_LED_CONFIG=""
-fi
+#if [ $ZYNTHIAN_EPDF_HAT -eq 0 ]; then
+#	export ACT_LED_CONFIG="dtoverlay=act-led,activelow=off,gpio=4\n\n"     
+#else
+#	export ACT_LED_CONFIG=""
+#fi
 
 #------------------------------------------------------------------------------
 # Escape Config Variables to replace
@@ -623,11 +625,11 @@ if [ "$(systemctl is-enabled usb-gadget)" != "enabled" ]; then
 fi
 
 #enable the pwm fan service if an EPDF hat is detected, or disable it if hat not present
-if [ $ZYNTHIAN_EPDF_HAT -eq 0 ]; then
-    systemctl enable zynthian-pwm-fan
-else
-    systemctl disable zynthian-pwm-fan
-fi
+#if [ $ZYNTHIAN_EPDF_HAT -eq 0 ]; then
+#    systemctl enable zynthian-pwm-fan
+#else
+#    systemctl disable zynthian-pwm-fan
+#fi
 
 if [ -f "$ZYNTHIAN_MY_DATA_DIR/scripts/update_zynthian_sys.sh" ]; then
 	bash "$ZYNTHIAN_MY_DATA_DIR/scripts/update_zynthian_sys.sh"

@@ -55,48 +55,55 @@ source "zynthian_envars_extended.sh"
 #apt-mark hold raspberrypi-kernel
 
 # Update System
-apt-get -y update --allow-releaseinfo-change
-apt-get -y dist-upgrade
+apt-get -y update
+# --allow-releaseinfo-change
+# apt-get -y dist-upgrade
 
 # Install required dependencies if needed
-apt-get -y install apt-utils apt-transport-https rpi-update sudo software-properties-common parted dirmngr rpi-eeprom gpgv
-#htpdate
+apt-get -y install apt-utils apt-transport-https sudo software-properties-common parted dirmngr gpgv htpdate
+# rpi-update  rpi-eeprom
 
 # Adjust System Date/Time
-#htpdate -s www.pool.ntp.org wikipedia.org google.com
+htpdate -s www.pool.ntp.org wikipedia.org google.com
 
 # Update Firmware
-if [ "$ZYNTHIAN_INCLUDE_RPI_UPDATE" == "yes" ]; then
-    rpi-update
-fi
+#if [ "$ZYNTHIAN_INCLUDE_RPI_UPDATE" == "yes" ]; then
+#    rpi-update
+#fi
 
 #------------------------------------------------
 # Add Repositories
 #------------------------------------------------
 
 # deb-multimedia repo
-echo "deb http://www.deb-multimedia.org buster main non-free" >> /etc/apt/sources.list
-wget https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2016.8.1_all.deb
-dpkg -i deb-multimedia-keyring_2016.8.1_all.deb
-rm -f deb-multimedia-keyring_2016.8.1_all.deb
+#echo "deb http://www.deb-multimedia.org buster main non-free" >> /etc/apt/sources.list
+#wget https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2016.8.1_all.deb
+#dpkg -i deb-multimedia-keyring_2016.8.1_all.deb
+#rm -f deb-multimedia-keyring_2016.8.1_all.deb
+# 2024-02-20 No riscv64 in deb-multimedia repos
+
 
 # KXStudio
-wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
-dpkg -i kxstudio-repos_10.0.3_all.deb
-rm -f kxstudio-repos_10.0.3_all.deb
+#wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
+#dpkg -i kxstudio-repos_10.0.3_all.deb
+#rm -f kxstudio-repos_10.0.3_all.deb
+# 2024-02-24 No rscv64 in KX Studio repos
+
 
 # Zynthian
 wget -O - https://deb.zynthian.org/deb-zynthian-org.gpg > /etc/apt/trusted.gpg.d/deb-zynthian-org.gpg
 echo "deb https://deb.zynthian.org/zynthian-stable buster main" > /etc/apt/sources.list.d/zynthian.list
 
 # Sfizz
-sfizz_url_base="http://download.opensuse.org/repositories/home:/sfztools:/sfizz:/develop/Raspbian_10"
-echo "deb $sfizz_url_base/ /" > /etc/apt/sources.list.d/sfizz-dev.list
-curl -fsSL $sfizz_url_base/Release.key | apt-key add -
+#sfizz_url_base="http://download.opensuse.org/repositories/home:/sfztools:/sfizz:/develop/Raspbian_10"
+#echo "deb $sfizz_url_base/ /" > /etc/apt/sources.list.d/sfizz-dev.list
+#curl -fsSL $sfizz_url_base/Release.key | apt-key add -
+# Sfizz repos are amd64 only
+
 
 apt-get -y update
-apt-get -y dist-upgrade
-apt-get -y autoremove
+# apt-get -y dist-upgrade
+# apt-get -y autoremove
 
 #------------------------------------------------
 # Install Required Packages
@@ -104,18 +111,22 @@ apt-get -y autoremove
 
 # System
 apt-get -y remove --purge isc-dhcp-client triggerhappy logrotate dphys-swapfile
-apt-get -y install systemd avahi-daemon dhcpcd-dbus usbutils udisks2 udevil
-# 2023-07-26 FAIL no such package exfat-utils
-apt-get -y install xinit xserver-xorg-video-fbdev x11-xserver-utils xinput 
+apt-get -y install systemd avahi-daemon dhcpcd-dbus usbutils udisks2 udevil exfatprogs
+# 2023-07-26 FAIL no such package exfat-utils; replaced by exfatprogs
+apt-get -y install xinit xserver-xorg-video-fbdev x11-xserver-utils xinput tigervnc-standalone-server tigervnc-xorg-extension
 # 2023-07-26 libgl1-mesa-dri don't update mesa as per visionfive
-# 2023-07-26 vnc4server pkg not found
+# 2023-07-26 vnc4server pkg not found; vnc4server is buster only
+# 2024-02-20       replaced here by tigervnc-standalone-server and tigervnc-xorg-extension
 apt-get -y install xfwm4 xfce4-panel xdotool
-# 2023-07-26 Unable to locate package xfwm4-themes
+# 2023-07-26 Unable to locate package xfwm4-themes - removed from debian in bullseye and later
 # 2023-07-26 Package 'cpufrequtils' has no installation candidate
 
 apt-get -y install wpasupplicant wireless-tools iw hostapd dnsmasq
-apt-get -y install firmware-brcm80211 firmware-atheros firmware-realtek atmel-firmware firmware-misc-nonfree
-#firmware-ralink
+# apt-get -y install firmware-brcm80211 firmware-atheros firmware-realtek atmel-firmware firmware-misc-nonfree
+# firmware-ralink
+# 2024-20-20 Assume for now all this is hardware dependent
+
+
 
 # Alternate XServer with some 2D acceleration
 #apt-get -y install xserver-xorg-video-fbturbo
@@ -124,7 +135,7 @@ apt-get -y install firmware-brcm80211 firmware-atheros firmware-realtek atmel-fi
 # CLI Tools
 apt-get -y install psmisc tree joe nano vim p7zip-full i2c-tools ddcutil
 # 2023-07-26 raspi-config  -- rpi specific
-apt-get -y install fbi scrot mpg123 xloadimage imagemagick fbcat abcmidi
+apt-get -y install fbi scrot mpg123 xloadimage imagemagick fbcat abcmidi mplayer
 #2023-07-26 mplayer
 #The following packages have unmet dependencies:
 # mplayer : Depends: libavcodec58 (>= 7:4.4) but it is not installable
@@ -133,9 +144,8 @@ apt-get -y install fbi scrot mpg123 xloadimage imagemagick fbcat abcmidi
 #           Depends: libpostproc55 (>= 7:4.4) but it is not installable
 #           Depends: libswresample3 (>= 7:4.4) but it is not installable
 #           Depends: libswscale5 (>= 7:4.4) but it is not installable
-
-apt-get -y install evtest libts-bin # touchscreen tools
-#apt-get install python-smbus (i2c with python)
+#2024-02-20 mplayer for riscv64 now in sid putting back in
+apt-get -y install evtest libts-bin python3-smbus # touchscreen tools
 
 # Lguyome45: remove for Raspberry pi 4, with this firmware, wifi does not work
 # Non-free WIFI firmware for RBPi3
@@ -150,20 +160,26 @@ apt-get -y install evtest libts-bin # touchscreen tools
 #Tools
 apt-get -y --no-install-recommends install build-essential git swig subversion pkg-config autoconf automake \
 gettext intltool libtool libtool-bin cmake cmake-curses-gui flex bison ngrep qt5-qmake gobjc++ \
-ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband-cli
+ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband-cli premake
 # 2023-07-26  premake qt4-qmake qt5-default
 # E: Unable to locate package premake
-# E: Unable to locate package qt4-qmake
-# E: Package 'qt5-default' has no installation candidate
-f
+# E: Unable to locate package qt4-qmake - buster only
+# E: Package 'qt5-default' has no installation candidate - buster only
+# 2024-02-20 Added premake back in as its in sid for riscv64
+
+
 # AV Libraries => WARNING It should be changed on every new debian version!!
 apt-get -y --no-install-recommends install libavformat-dev \
-libavcodec-dev
+libavcodec-dev \
+libavcodec60 \
+libavformat60 \
+libavutil58 \
+libswresample4
 # 2023-07-26 libavcodec58 libavformat58 libavutil56 libavresample4
-#E: Package 'libavcodec58' has no installation candidate
-#E: Package 'libavformat58' has no installation candidate
-#E: Package 'libavutil56' has no installation candidate
-#E: Unable to locate package libavresample4
+#E: Package 'libavcodec58' has no installation candidate - updated to ...60 for sid
+#E: Package 'libavformat58' has no installation candidate - updated to ...60 for sid
+#E: Package 'libavutil56' has no installation candidate - updated to ...58 for sid
+#E: Unable to locate package libavresample4 - replaced by libswresample4 in bookworm and beyond
 
 # Libraries
 apt-get -y --no-install-recommends install libfftw3-dev libmxml-dev zlib1g-dev fluid libfltk1.3-dev \
@@ -175,19 +191,20 @@ lv2-c++-tools libxi-dev libgtk2.0-dev libgtkmm-2.4-dev liblrdf-dev libboost-syst
 libzita-resampler-dev fonts-roboto libxcursor-dev libxinerama-dev mesa-common-dev libgl1-mesa-dev \
 libfreetype6-dev  libswscale-dev qtbase5-dev qtdeclarative5-dev libcanberra-gtk-module \
 libcanberra-gtk3-module libxcb-cursor-dev libgtk-3-dev libxcb-util0-dev libxcb-keysyms1-dev libxcb-xkb-dev \
-libxkbcommon-x11-dev libssl-dev libmpg123-0 libmp3lame0 libqt5svg5-dev
+libxkbcommon-x11-dev libssl-dev libmpg123-0 libmp3lame0 libqt5svg5-dev \
+a2jmidid
 # 2023-07-26 a2jmidid laditools liblash-compat-dev libqt4-dev
-#E: Package 'a2jmidid' has no installation candidate
-#E: Package 'laditools' has no installation candidate
-#E: Unable to locate package liblash-compat-dev
-#E: Unable to locate package libqt4-dev
+#E: Package 'a2jmidid' has no installation candidate - now available in sid
+#E: Package 'laditools' has no installation candidate - python2; removed after buster
+#E: Unable to locate package liblash-compat-dev - buster only no longer supported
+#E: Unable to locate package libqt4-dev - buster only
 
 #libjack-dev-session
 #non-ntk-dev
 #libgd2-xpm-dev
 
 # Python
-apt-get -y install python2.7 python2.7-dev 
+#apt-get -y install python python-dev cython python-dbus python-setuptools
 # cython python-dbus python-setuptools
 # 2023-07-23 
 #E: Package 'python' has no installation candidate
@@ -196,16 +213,18 @@ apt-get -y install python2.7 python2.7-dev
 #E: Package 'python-dbus' has no installation candidate
 #E: Package 'python-setuptools' has no installation candidate
 # 2023-08-09 Update to python2.7 instead of just python
-E: Unable to locate package python2.7-dbus
-E: Couldn't find any package by glob 'python2.7-dbus'
-E: Unable to locate package python2.7-setuptools
-E: Couldn't find any package by glob 'python2.7-setuptools'
+# apt-get -y install python2.7 python2.7-dev
+# Ooops Python2.7 is not available in bookworm and beyond
+#E: Unable to locate package python2.7-dbus
+#E: Couldn't find any package by glob 'python2.7-dbus'
+#E: Unable to locate package python2.7-setuptools
+#E: Couldn't find any package by glob 'python2.7-setuptools'
 
 
 apt-get -y install python3 python3-dev cython3 python3-cffi python3-tk python3-dbus python3-mpmath python3-pil \
 python3-pil.imagetk python3-setuptools python3-numpy-dev python3-evdev 2to3 python3-soundfile librubberband-dev
 # 2023-07-26  python3-pyqt4
-# E: Package 'python3-pyqt4' has no installation candidate
+# E: Package 'python3-pyqt4' has no installation candidate - no qt4 support beyond buster
 
 if [ "$ZYNTHIAN_INCLUDE_PIP" == "yes" ]; then
     apt-get -y install  python3-pip
@@ -213,14 +232,15 @@ fi
 # 2023-08-09 Can't find python-pip, python2.7-pip or python2-pip
 
 pip3 install tornado==4.1 tornadostreamform websocket-client
-pip3 install jsonpickle oyaml psutil pexpect requests meson ninja
-pip3 install mido python-rtmidi rpi_ws281x
+pip3 install jsonpickle oyaml psutil pexpect requests meson ninja JACK-Client
+pip3 install mido python-rtmidi==python1.4.9 ffmpeg-python
+# rpi_ws281x
 # 2023-08-09 patchage
 #ERROR: Could not find a version that satisfies the requirement patchage (from versions: none)
 #ERROR: No matching distribution found for patchage
 
 pip3 install abletonparsing pyrubberband sox
-#mutagen
+python3 -m pip install mutagen
 
 #************************************************
 #------------------------------------------------
@@ -242,9 +262,9 @@ cd $ZYNTHIAN_DIR
 git clone -b "${ZYNTHIAN_SYS_BRANCH}" "${ZYNTHIAN_SYS_REPO}"
 
 # Install WiringPi
-$ZYNTHIAN_RECIPE_DIR/install_wiringpi.sh
+#$ZYNTHIAN_RECIPE_DIR/install_wiringpi.sh
 # 2023-08-09 RPi related?  But compiles OK
-
+# 2024-02-20 Commented out install of wiring pi
 
 # Zyncoder library
 cd $ZYNTHIAN_DIR
@@ -375,8 +395,8 @@ echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
 
 
 # On first boot, resize SD partition, regenerate keys, etc.
-$ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
-
+#$ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
+# 2024-02-20 Not sure why this is here 
 
 #************************************************
 #------------------------------------------------
@@ -385,8 +405,9 @@ $ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
 #************************************************
 
 # Install some extra packages:
-apt-get -y install jack-midi-clock 
+apt-get -y install jack-midi-clock midisport-firmware
 # ERROR midisport-firmware package not found
+# 2024-02-20 midisport-firmware should be in repos for all releases adding back in
 
 # Install Jack2
 $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
@@ -402,7 +423,9 @@ $ZYNTHIAN_RECIPE_DIR/install_jack2.sh
 $ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
 
 # Install mod-ttymidi (MOD's ttymidi version with jackd MIDI support)
-$ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
+#$ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
+# 2024-20-02 commenting out since lots of issues a boot time that look like caused by this
+
 
 # Install LV2 lilv library
 $ZYNTHIAN_RECIPE_DIR/install_lv2_lilv.sh
@@ -468,7 +491,9 @@ $ZYNTHIAN_RECIPE_DIR/install_noVNC.sh
 $ZYNTHIAN_RECIPE_DIR/install_terminado.sh
 
 # Install DT overlays for waveshare displ[Aays and others
-$ZYNTHIAN_RECIPE_DIR/install_waveshare-dtoverlays.sh
+#$ZYNTHIAN_RECIPE_DIR/install_waveshare-dtoverlays.sh
+# 2024-02-20 No DT OVERLAYS for vf2
+
 
 #************************************************
 #------------------------------------------------

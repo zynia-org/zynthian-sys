@@ -1,6 +1,6 @@
 #!/bin/bash
 
-exit
+exit 0
 
 # Display Zynthian Boot Splash Screen => Not used anymore!
 if [[ "$FRAMEBUFFER" == "/dev/fb1" ]]; then
