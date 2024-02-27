@@ -21,6 +21,7 @@
 # For a full copy of the GNU General Public License see the LICENSE.txt file.
 #
 #******************************************************************************
+set -x
 
 #------------------------------------------------------------------------------
 # Load Environment Variables
