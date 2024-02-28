@@ -61,11 +61,18 @@ apt-get -y update
 # apt-get -y dist-upgrade
 
 # Install required dependencies if needed
-apt-get -y install apt-utils apt-transport-https sudo software-properties-common parted dirmngr gpgv htpdate
+apt-get -y install apt-utils
+apt-get -y install apt-transport-https
+apt-get -y install sudo
+apt-get -y install software-properties-common
+apt-get -y install parted
+apt-get -y install dirmngr
+apt-get -y install gpgv
+apt-get -y install htpdate
 # rpi-update  rpi-eeprom
 
 # Adjust System Date/Time
-htpdate -s www.pool.ntp.org wikipedia.org google.com
+htpdate -s www.pool.ntp.org google.com
 
 # Update Firmware
 #if [ "$ZYNTHIAN_INCLUDE_RPI_UPDATE" == "yes" ]; then
@@ -111,18 +118,38 @@ apt-get -y update
 #------------------------------------------------
 
 # System
-apt-get -y remove --purge isc-dhcp-client triggerhappy logrotate dphys-swapfile
-apt-get -y install systemd avahi-daemon dhcpcd-dbus usbutils udisks2 udevil exfatprogs
+apt-get -y remove --purge isc-dhcp-client
+apt-get -y remove --purge triggerhappy
+apt-get -y remove --purge logrotate
+apt-get -y remove --purge dphys-swapfile
+apt-get -y install systemd
+apt-get -y install avahi-daemon
+apt-get -y install usbutils
+apt-get -y install udisks2
+apt-get -y install udevil
+apt-get -y install exfatprogs
 # 2023-07-26 FAIL no such package exfat-utils; replaced by exfatprogs
-apt-get -y install xinit xserver-xorg-video-fbdev x11-xserver-utils xinput tigervnc-standalone-server tigervnc-xorg-extension
+# 2024-02-27 no package dhcpcd-dbus in sid or ports
+apt-get -y install xinit
+apt-get -y install xserver-xorg-video-fbdev
+apt-get -y install x11-xserver-utils
+apt-get -y install xinput
+apt-get -y install tigervnc-standalone-server
+apt-get -y install tigervnc-xorg-extension
 # 2023-07-26 libgl1-mesa-dri don't update mesa as per visionfive
 # 2023-07-26 vnc4server pkg not found; vnc4server is buster only
 # 2024-02-20       replaced here by tigervnc-standalone-server and tigervnc-xorg-extension
-apt-get -y install xfwm4 xfce4-panel xdotool
+apt-get -y install xfwm4
+apt-get -y install xfce4-panel
+apt-get -y install xdotool
 # 2023-07-26 Unable to locate package xfwm4-themes - removed from debian in bullseye and later
 # 2023-07-26 Package 'cpufrequtils' has no installation candidate
 
-apt-get -y install wpasupplicant wireless-tools iw hostapd dnsmasq
+apt-get -y install wpasupplicant
+apt-get -y install wireless-tools
+apt-get -y install iw
+apt-get -y install hostapd
+apt-get -y install dnsmasq
 # apt-get -y install firmware-brcm80211 firmware-atheros firmware-realtek atmel-firmware firmware-misc-nonfree
 # firmware-ralink
 # 2024-20-20 Assume for now all this is hardware dependent
@@ -134,9 +161,22 @@ apt-get -y install wpasupplicant wireless-tools iw hostapd dnsmasq
 #ln -s /usr/lib/arm-linux-gnueabihf/xorg/modules/drivers/fbturbo_drv.so /usr/lib/xorg/modules/drivers
 
 # CLI Tools
-apt-get -y install psmisc tree joe nano vim p7zip-full i2c-tools ddcutil
+apt-get -y install psmisc
+apt-get -y install tree
+apt-get -y install joe
+apt-get -y install nano
+apt-get -y install vim
+apt-get -y install p7zip-full
+apt-get -y install i2c-tools
+apt-get -y install ddcutil
 # 2023-07-26 raspi-config  -- rpi specific
-apt-get -y install fbi scrot mpg123 xloadimage imagemagick fbcat abcmidi mplayer
+apt-get -y install fbi
+apt-get -y install scrot
+apt-get -y install mpg123
+apt-get -y install xloadimage
+apt-get -y install imagemagick
+apt-get -y install fbcat
+apt-get -y install abcmidi
 #2023-07-26 mplayer
 #The following packages have unmet dependencies:
 # mplayer : Depends: libavcodec58 (>= 7:4.4) but it is not installable
@@ -145,8 +185,11 @@ apt-get -y install fbi scrot mpg123 xloadimage imagemagick fbcat abcmidi mplayer
 #           Depends: libpostproc55 (>= 7:4.4) but it is not installable
 #           Depends: libswresample3 (>= 7:4.4) but it is not installable
 #           Depends: libswscale5 (>= 7:4.4) but it is not installable
-#2024-02-20 mplayer for riscv64 now in sid putting back in
-apt-get -y install evtest libts-bin python3-smbus # touchscreen tools
+#2024-02-20 mplayer for riscv64 now in sid putting back in, but later in build
+# touchscreen tools
+apt-get -y install evtest
+apt-get -y install libts-bin
+apt-get -y install python3-smbus
 
 # Lguyome45: remove for Raspberry pi 4, with this firmware, wifi does not work
 # Non-free WIFI firmware for RBPi3
@@ -159,9 +202,34 @@ apt-get -y install evtest libts-bin python3-smbus # touchscreen tools
 #------------------------------------------------
 
 #Tools
-apt-get -y --no-install-recommends install build-essential git swig subversion pkg-config autoconf automake \
-gettext intltool libtool libtool-bin cmake cmake-curses-gui flex bison ngrep qt5-qmake gobjc++ \
-ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband-cli premake
+apt-get -y --no-install-recommends install build-essential
+apt-get -y --no-install-recommends install git
+apt-get -y --no-install-recommends install swig
+apt-get -y --no-install-recommends install subversion
+apt-get -y --no-install-recommends install pkg-config
+apt-get -y --no-install-recommends install autoconf
+apt-get -y --no-install-recommends install automake
+apt-get -y --no-install-recommends install gettext
+apt-get -y --no-install-recommends install intltool
+apt-get -y --no-install-recommends install libtool
+apt-get -y --no-install-recommends install libtool-bin
+apt-get -y --no-install-recommends install cmake
+apt-get -y --no-install-recommends install cmake-curses-gui
+apt-get -y --no-install-recommends install flex
+apt-get -y --no-install-recommends install bison
+apt-get -y --no-install-recommends install ngrep
+apt-get -y --no-install-recommends install qt5-qmake
+apt-get -y --no-install-recommends install gobjc++
+apt-get -y --no-install-recommends install ruby
+apt-get -y --no-install-recommends install rake
+apt-get -y --no-install-recommends install xsltproc
+apt-get -y --no-install-recommends install vorbis-tools
+apt-get -y --no-install-recommends install zenity
+apt-get -y --no-install-recommends install doxygen
+apt-get -y --no-install-recommends install graphviz
+apt-get -y --no-install-recommends install glslang-tools
+apt-get -y --no-install-recommends install rubberband-cli
+apt-get -y --no-install-recommends install premake4
 # 2023-07-26  premake qt4-qmake qt5-default
 # E: Unable to locate package premake
 # E: Unable to locate package qt4-qmake - buster only
@@ -170,30 +238,80 @@ ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband
 
 
 # AV Libraries => WARNING It should be changed on every new debian version!!
-apt-get -y --no-install-recommends install libavformat-dev \
-libavcodec-dev \
-libavcodec60 \
-libavformat60 \
-libavutil58 \
-libswresample4
+#apt-get -y --no-install-recommends install libavformat-dev
+#apt-get -y --no-install-recommends install libavcodec-dev
+#apt-get -y --no-install-recommends install libavcodec60
+#apt-get -y --no-install-recommends install libavformat60
+#apt-get -y --no-install-recommends install libavutil58
+#apt-get -y --no-install-recommends install libswresample4
 # 2023-07-26 libavcodec58 libavformat58 libavutil56 libavresample4
 #E: Package 'libavcodec58' has no installation candidate - updated to ...60 for sid
 #E: Package 'libavformat58' has no installation candidate - updated to ...60 for sid
 #E: Package 'libavutil56' has no installation candidate - updated to ...58 for sid
 #E: Unable to locate package libavresample4 - replaced by libswresample4 in bookworm and beyond
-
+#apt-get -y  --no-install-recommends install mplayer
 # Libraries
-apt-get -y --no-install-recommends install libfftw3-dev libmxml-dev zlib1g-dev fluid libfltk1.3-dev \
-libfltk1.3-compat-headers libncurses5-dev liblo-dev dssi-dev libjpeg-dev libxpm-dev libcairo2-dev libglu1-mesa-dev \
-libasound2-dev dbus-x11 jackd2 libjack-jackd2-dev libffi-dev \
-fontconfig-config libfontconfig1-dev libxft-dev libexpat-dev libglib2.0-dev libgettextpo-dev libsqlite3-dev \
-libglibmm-2.4-dev libeigen3-dev libsndfile-dev libsamplerate-dev libarmadillo-dev libreadline-dev \
-lv2-c++-tools libxi-dev libgtk2.0-dev libgtkmm-2.4-dev liblrdf-dev libboost-system-dev libzita-convolver-dev \
-libzita-resampler-dev fonts-roboto libxcursor-dev libxinerama-dev mesa-common-dev libgl1-mesa-dev \
-libfreetype6-dev  libswscale-dev qtbase5-dev qtdeclarative5-dev libcanberra-gtk-module \
-libcanberra-gtk3-module libxcb-cursor-dev libgtk-3-dev libxcb-util0-dev libxcb-keysyms1-dev libxcb-xkb-dev \
-libxkbcommon-x11-dev libssl-dev libmpg123-0 libmp3lame0 libqt5svg5-dev \
-a2jmidid
+apt-get -y --no-install-recommends install libfftw3-dev
+apt-get -y --no-install-recommends install libmxml-dev
+apt-get -y --no-install-recommends install zlib1g-dev
+apt-get -y --no-install-recommends install fluid
+apt-get -y --no-install-recommends install libfltk1.3-dev
+apt-get -y --no-install-recommends install libfltk1.3-compat-headers
+apt-get -y --no-install-recommends install libncurses5-dev
+apt-get -y --no-install-recommends install liblo-dev
+apt-get -y --no-install-recommends install dssi-dev
+apt-get -y --no-install-recommends install libjpeg-dev
+apt-get -y --no-install-recommends install libxpm-dev
+apt-get -y --no-install-recommends install libcairo2-dev
+apt-get -y --no-install-recommends install libglu1-mesa-dev
+apt-get -y --no-install-recommends install libasound2-dev
+apt-get -y --no-install-recommends install dbus-x11
+apt-get -y --no-install-recommends install jackd2
+apt-get -y --no-install-recommends install libjack-jackd2-dev
+apt-get -y --no-install-recommends install libffi-dev
+apt-get -y --no-install-recommends install fontconfig-config
+apt-get -y --no-install-recommends install libfontconfig1-dev
+apt-get -y --no-install-recommends install libxft-dev
+apt-get -y --no-install-recommends install libexpat-dev
+apt-get -y --no-install-recommends install libglib2.0-dev
+apt-get -y --no-install-recommends install libgettextpo-dev
+apt-get -y --no-install-recommends install libsqlite3-dev
+apt-get -y --no-install-recommends install libglibmm-2.4-dev
+apt-get -y --no-install-recommends install libeigen3-dev
+apt-get -y --no-install-recommends install libsndfile-dev
+apt-get -y --no-install-recommends install libsamplerate-dev
+apt-get -y --no-install-recommends install libarmadillo-dev
+apt-get -y --no-install-recommends install libreadline-dev
+apt-get -y --no-install-recommends install lv2-c++-tools
+apt-get -y --no-install-recommends install libxi-dev
+apt-get -y --no-install-recommends install libgtk2.0-dev
+apt-get -y --no-install-recommends install libgtkmm-2.4-dev
+apt-get -y --no-install-recommends install liblrdf-dev
+apt-get -y --no-install-recommends install libboost-system-dev
+apt-get -y --no-install-recommends install libzita-convolver-dev
+apt-get -y --no-install-recommends install libzita-resampler-dev
+apt-get -y --no-install-recommends install fonts-roboto
+apt-get -y --no-install-recommends install libxcursor-dev
+apt-get -y --no-install-recommends install libxinerama-dev
+apt-get -y --no-install-recommends install mesa-common-dev
+apt-get -y --no-install-recommends install libgl1-mesa-dev
+apt-get -y --no-install-recommends install libfreetype-dev
+apt-get -y --no-install-recommends install libswscale-dev
+apt-get -y --no-install-recommends install qtbase5-dev
+apt-get -y --no-install-recommends install qtdeclarative5-dev
+apt-get -y --no-install-recommends install libcanberra-gtk-module
+apt-get -y --no-install-recommends install libcanberra-gtk3-module
+apt-get -y --no-install-recommends install libxcb-cursor-dev
+apt-get -y --no-install-recommends install libgtk-3-dev
+apt-get -y --no-install-recommends install libxcb-util0-dev
+apt-get -y --no-install-recommends install libxcb-keysyms1-dev
+apt-get -y --no-install-recommends install libxcb-xkb-dev
+apt-get -y --no-install-recommends install libxkbcommon-x11-dev
+apt-get -y --no-install-recommends install libssl-dev
+apt-get -y --no-install-recommends install libmpg123-0
+apt-get -y --no-install-recommends install libmp3lame0
+apt-get -y --no-install-recommends install libqt5svg5-dev
+apt-get -y --no-install-recommends install a2jmidid
 # 2023-07-26 a2jmidid laditools liblash-compat-dev libqt4-dev
 #E: Package 'a2jmidid' has no installation candidate - now available in sid
 #E: Package 'laditools' has no installation candidate - python2; removed after buster
@@ -222,8 +340,21 @@ a2jmidid
 #E: Couldn't find any package by glob 'python2.7-setuptools'
 
 
-apt-get -y install python3 python3-dev cython3 python3-cffi python3-tk python3-dbus python3-mpmath python3-pil \
-python3-pil.imagetk python3-setuptools python3-numpy-dev python3-evdev 2to3 python3-soundfile librubberband-dev
+apt-get -y install python3
+apt-get -y install python3-dev
+apt-get -y install cython3
+apt-get -y install python3-cffi
+apt-get -y install python3-tk
+apt-get -y install python3-dbus
+apt-get -y install python3-mpmath
+apt-get -y install python3-pil
+apt-get -y install python3-pil.imagetk
+apt-get -y install python3-setuptools
+apt-get -y install python3-numpy-dev
+apt-get -y install python3-evdev
+apt-get -y install 2to3
+apt-get -y install python3-soundfile
+apt-get -y install librubberband-dev
 # 2023-07-26  python3-pyqt4
 # E: Package 'python3-pyqt4' has no installation candidate - no qt4 support beyond buster
 
@@ -232,9 +363,12 @@ if [ "$ZYNTHIAN_INCLUDE_PIP" == "yes" ]; then
 fi
 # 2023-08-09 Can't find python-pip, python2.7-pip or python2-pip
 
+if [ -f "/usr/lib/python3.11/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.11/EXTERNALLY-MANAGED"; fi
+if [ -f "/usr/lib/python3.12/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.12/EXTERNALLY-MANAGED"; fi
+
 pip3 install tornado==4.1 tornadostreamform websocket-client
 pip3 install jsonpickle oyaml psutil pexpect requests meson ninja JACK-Client
-pip3 install mido python-rtmidi==python1.4.9 ffmpeg-python
+pip3 install mido python-rtmidi==python1.4.9 mplayerffmpeg-python
 # rpi_ws281x
 # 2023-08-09 patchage
 #ERROR: Could not find a version that satisfies the requirement patchage (from versions: none)
@@ -372,6 +506,7 @@ systemctl disable wpa_supplicant
 systemctl disable unattended-upgrades
 systemctl disable apt-daily.timer
 systemctl mask packagekit
+dpkg-divert --divert /etc/PackageKit/20packagekit.distrib --rename  /etc/apt/apt.conf.d/20packagekit
 systemctl mask polkit
 systemctl disable serial-getty@ttyAMA0.service
 #systemctl disable sys-devices-platform-soc-3f201000.uart-tty-ttyAMA0.device
@@ -406,7 +541,8 @@ echo "source $ZYNTHIAN_SYS_DIR/etc/profile.zynthian" >> /root/.profile
 #************************************************
 
 # Install some extra packages:
-apt-get -y install jack-midi-clock midisport-firmware
+apt-get -y install jack-midi-clock
+apt-get -y install midisport-firmware
 # ERROR midisport-firmware package not found
 # 2024-02-20 midisport-firmware should be in repos for all releases adding back in
 
@@ -507,7 +643,11 @@ $ZYNTHIAN_RECIPE_DIR/install_terminado.sh
 apt-get -y install zynaddsubfx
 
 # Install Fluidsynth & SF2 SondFonts
-apt-get -y install fluidsynth libfluidsynth-dev fluid-soundfont-gm fluid-soundfont-gs timgm6mb-soundfont
+apt-get -y install fluidsynth
+apt-get -y install libfluidsynth-dev
+apt-get -y install fluid-soundfont-gm
+apt-get -y install fluid-soundfont-gs
+apt-get -y install timgm6mb-soundfont
 # Create SF2 soft links
 ln -s /usr/share/sounds/sf2/*.sf2 $ZYNTHIAN_DATA_DIR/soundfonts/sf2
 
@@ -553,12 +693,60 @@ $ZYNTHIAN_RECIPE_DIR/install_pianoteq_demo.sh
 # Error: mididings is Python2 only and hence dropped from Debian/Ubuntu
 
 # Install Pure Data stuff
-apt-get -y install puredata puredata-core puredata-utils python3-yaml \
-pd-lua pd-moonlib pd-pdstring pd-markex pd-iemnet pd-plugin pd-ekext pd-import pd-bassemu pd-readanysf pd-pddp \
-pd-zexy pd-list-abs pd-flite pd-windowing pd-fftease pd-bsaylor pd-osc pd-sigpack pd-hcs pd-pdogg pd-purepd \
-pd-beatpipe pd-freeverb pd-iemlib pd-smlib pd-hid pd-csound pd-earplug pd-wiimote pd-pmpd pd-motex \
-pd-arraysize pd-ggee pd-chaos pd-iemmatrix pd-comport pd-libdir pd-vbap pd-cxc pd-lyonpotpourri pd-iemambi \
-pd-pdp pd-mjlib pd-cyclone pd-jmmmp pd-3dp pd-boids pd-mapping pd-maxlib
+apt-get -y install puredata
+apt-get -y install puredata-core
+apt-get -y install puredata-utils
+apt-get -y install python3-yaml
+apt-get -y install pd-lua
+apt-get -y install pd-moonlib
+apt-get -y install pd-pdstring
+apt-get -y install pd-markex
+apt-get -y install pd-iemnet
+apt-get -y install pd-plugin
+apt-get -y install pd-ekext
+apt-get -y install pd-import
+apt-get -y install pd-bassemu
+apt-get -y install pd-readanysf
+apt-get -y install pd-pddp
+apt-get -y install pd-zexy
+apt-get -y install pd-list-abs
+apt-get -y install pd-flite
+apt-get -y install pd-windowing
+apt-get -y install pd-fftease
+apt-get -y install pd-bsaylor
+apt-get -y install pd-osc
+apt-get -y install pd-sigpack
+apt-get -y install pd-hcs
+apt-get -y install pd-pdogg
+apt-get -y install pd-purepd
+apt-get -y install pd-beatpipe
+apt-get -y install pd-freeverb
+apt-get -y install pd-iemlib
+apt-get -y install pd-smlib
+apt-get -y install pd-hid
+apt-get -y install pd-csound
+apt-get -y install pd-earplug
+apt-get -y install pd-wiimote
+apt-get -y install pd-pmpd
+apt-get -y install pd-motex
+apt-get -y install pd-arraysize
+apt-get -y install pd-ggee
+apt-get -y install pd-chaos
+apt-get -y install pd-iemmatrix
+apt-get -y install pd-comport
+apt-get -y install pd-libdir
+apt-get -y install pd-vbap
+apt-get -y install pd-cxc
+apt-get -y install pd-lyonpotpourri
+apt-get -y install pd-iemambi
+apt-get -y install pd-pdp
+apt-get -y install pd-mjlib
+apt-get -y install pd-cyclone
+apt-get -y install pd-jmmmp
+apt-get -y install pd-3dp
+apt-get -y install pd-boids
+apt-get -y install pd-mapping
+apt-get -y install pd-maxlib
 # Error pd-aubio package no longer in debian
 
 mkdir /root/Pd
@@ -622,8 +810,8 @@ $ZYNTHIAN_SYS_DIR/scripts/update_zynthian_sys.sh
 #************************************************
 
 #Block MS repo from being installed
-apt-mark hold raspberrypi-sys-mods
-touch /etc/apt/trusted.gpg.d/microsoft.gpg
+#apt-mark hold raspberrypi-sys-mods
+#touch /etc/apt/trusted.gpg.d/microsoft.gpg
 
 # Clean
 apt-get -y autoremove # Remove unneeded packages

@@ -103,7 +103,7 @@ if [ -z "$RASPI" ]; then
 	export CFLAGS="${CPU} ${FPU}"
 	export CXXFLAGS=${CFLAGS}
 	export CFLAGS_UNSAFE=""
-	export RASPI="true"
+	export RASPI="false"
 
 	echo "Hardware Architecture: ${hw_architecture}"
 	echo "Hardware Model: ${rbpi_version}"
