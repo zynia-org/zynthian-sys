@@ -39,12 +39,12 @@ source "zynthian_envars_extended.sh"
 
 [ -n "$ZYNTHIAN_SYS_REPO" ] || ZYNTHIAN_SYS_REPO="https://github.com/zynthian/zynthian-sys.git"
 [ -n "$ZYNTHIAN_UI_REPO" ] || ZYNTHIAN_UI_REPO="https://github.com/zynthian/zynthian-ui.git"
-[ -n "$ZYNTHIAN_ZYNCODER_REPO" ] || ZYNTHIAN_ZYNCODER_REPO="https://github.com/zynthian/zyncoder.git"
+[ -n "$ZYNTHIAN_ZYNCODER_REPO" ] || ZYNTHIAN_ZYNCODER_REPO="https://github.com/zynia-org/zyncoder.git"
 [ -n "$ZYNTHIAN_WEBCONF_REPO" ] || ZYNTHIAN_WEBCONF_REPO="https://github.com/zynthian/zynthian-webconf.git"
 [ -n "$ZYNTHIAN_DATA_REPO" ] || ZYNTHIAN_DATA_REPO="https://github.com/zynthian/zynthian-data.git"
 [ -n "$ZYNTHIAN_SYS_BRANCH" ] || ZYNTHIAN_SYS_BRANCH="stable"
 [ -n "$ZYNTHIAN_UI_BRANCH" ] || ZYNTHIAN_UI_BRANCH="stable"
-[ -n "$ZYNTHIAN_ZYNCODER_BRANCH" ] || ZYNTHIAN_ZYNCODER_BRANCH="stable"
+[ -n "$ZYNTHIAN_ZYNCODER_BRANCH" ] || ZYNTHIAN_ZYNCODER_BRANCH="zynia"
 [ -n "$ZYNTHIAN_WEBCONF_BRANCH" ] || ZYNTHIAN_WEBCONF_BRANCH="stable"
 [ -n "$ZYNTHIAN_DATA_BRANCH" ] || ZYNTHIAN_DATA_BRANCH="stable"
 
@@ -339,43 +339,97 @@ apt-get -y --no-install-recommends install a2jmidid
 #E: Unable to locate package python2.7-setuptools
 #E: Couldn't find any package by glob 'python2.7-setuptools'
 
-
+# from bookwork-64bit script
 apt-get -y install python3
 apt-get -y install python3-dev
+apt-get -y install python3-venv
+apt-get -y install python3-pip
 apt-get -y install cython3
 apt-get -y install python3-cffi
+apt-get -y install 2to3
 apt-get -y install python3-tk
 apt-get -y install python3-dbus
 apt-get -y install python3-mpmath
 apt-get -y install python3-pil
 apt-get -y install python3-pil.imagetk
 apt-get -y install python3-setuptools
-apt-get -y install python3-numpy-dev
+apt-get -y install python3-pyqt5
+apt-get -y install python3-numpy
 apt-get -y install python3-evdev
-apt-get -y install 2to3
+apt-get -y install python3-usb
 apt-get -y install python3-soundfile
-apt-get -y install librubberband-dev
+apt-get -y install python3-psutil
+apt-get -y install python3-pexpect
+apt-get -y install python3-jsonpickle
+apt-get -y install python3-requests
+apt-get -y install python3-mido
+apt-get -y install python3-rtmidi
+apt-get -y install python3-mutagen
+apt-get -y install pyliblo-utils
+
+# original
+#apt-get -y install python3
+#apt-get -y install python3-dev
+#apt-get -y install cython3
+#apt-get -y install python3-cffi
+#apt-get -y install python3-tk
+#apt-get -y install python3-dbus
+#apt-get -y install python3-mpmath
+#apt-get -y install python3-pil
+#apt-get -y install python3-pil.imagetk
+#apt-get -y install python3-setuptools
+#apt-get -y install python3-numpy-dev
+#apt-get -y install python3-evdev
+#apt-get -y install 2to3
+#apt-get -y install python3-soundfile
+#apt-get -y install librubberband-dev
 # 2023-07-26  python3-pyqt4
 # E: Package 'python3-pyqt4' has no installation candidate - no qt4 support beyond buster
 
-if [ "$ZYNTHIAN_INCLUDE_PIP" == "yes" ]; then
-    apt-get -y install  python3-pip
-fi
+#if [ "$ZYNTHIAN_INCLUDE_PIP" == "yes" ]; then
+#    apt-get -y install  python3-pip
+#fi
 # 2023-08-09 Can't find python-pip, python2.7-pip or python2-pip
 
 if [ -f "/usr/lib/python3.11/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.11/EXTERNALLY-MANAGED"; fi
 if [ -f "/usr/lib/python3.12/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.12/EXTERNALLY-MANAGED"; fi
 
-pip3 install tornado==4.1 tornadostreamform websocket-client
-pip3 install jsonpickle oyaml psutil pexpect requests meson ninja JACK-Client
-pip3 install mido python-rtmidi==python1.4.9 mplayerffmpeg-python
+# from bookworm 64-bit script
+cd "$ZYNTHIAN_DIR"
+python3 -m venv venv --system-site-packages
+source "$ZYNTHIAN_DIR/venv/bin/activate"
+
+pip3 install --upgrade pip
+pip3 install tornado
+pip3 install tornadostreamform
+pip3 install websocket-client
+pip3 install xstatic
+pip3 install XStatic_term.js
+pip3 install tornado_xstatic
+pip3 install terminado
+pip3 install oyaml
+pip3 install JACK-Client
+pip3 install alsa-midi
+pip3 install sox
+pip3 install meson
+pip3 install ninja
+pip3 install rpi_ws281x
+pip3 install ffmpeg-python
+pip3 install pyrubberband
+pip3 install abletonparsing
+pip3 install Levenshtein
+
+#original
+#pip3 install tornado==4.1 tornadostreamform websocket-client
+#pip3 install jsonpickle oyaml psutil pexpect requests meson ninja JACK-Client
+#pip3 install mido python-rtmidi==python1.4.9 mplayerffmpeg-python
 # rpi_ws281x
 # 2023-08-09 patchage
 #ERROR: Could not find a version that satisfies the requirement patchage (from versions: none)
 #ERROR: No matching distribution found for patchage
 
-pip3 install abletonparsing pyrubberband sox
-python3 -m pip install mutagen
+#pip3 install abletonparsing pyrubberband sox
+#python3 -m pip install mutagen
 
 #************************************************
 #------------------------------------------------
