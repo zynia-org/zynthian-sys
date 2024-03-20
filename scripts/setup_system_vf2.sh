@@ -189,7 +189,6 @@ apt-get -y install abcmidi
 # touchscreen tools
 apt-get -y install evtest
 apt-get -y install libts-bin
-apt-get -y install python3-smbus
 
 # Lguyome45: remove for Raspberry pi 4, with this firmware, wifi does not work
 # Non-free WIFI firmware for RBPi3
@@ -340,6 +339,7 @@ apt-get -y --no-install-recommends install a2jmidid
 #E: Couldn't find any package by glob 'python2.7-setuptools'
 
 # from bookwork-64bit script
+apt-get -y purge python3
 apt-get -y install python3
 apt-get -y install python3-dev
 apt-get -y install python3-venv
@@ -366,6 +366,8 @@ apt-get -y install python3-mido
 apt-get -y install python3-rtmidi
 apt-get -y install python3-mutagen
 apt-get -y install pyliblo-utils
+#apt-get -y install python3-smbus
+apt-get -y install python3-xstatic
 
 # original
 #apt-get -y install python3
@@ -391,8 +393,8 @@ apt-get -y install pyliblo-utils
 #fi
 # 2023-08-09 Can't find python-pip, python2.7-pip or python2-pip
 
-if [ -f "/usr/lib/python3.11/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.11/EXTERNALLY-MANAGED"; fi
-if [ -f "/usr/lib/python3.12/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.12/EXTERNALLY-MANAGED"; fi
+#if [ -f "/usr/lib/python3.11/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.11/EXTERNALLY-MANAGED"; fi
+#if [ -f "/usr/lib/python3.12/EXTERNALLY-MANAGED" ]; then rm "/usr/lib/python3.12/EXTERNALLY-MANAGED"; fi
 
 # from bookworm 64-bit script
 cd "$ZYNTHIAN_DIR"
@@ -403,7 +405,7 @@ pip3 install --upgrade pip
 pip3 install tornado
 pip3 install tornadostreamform
 pip3 install websocket-client
-pip3 install xstatic
+#pip3 install xstatic
 pip3 install XStatic_term.js
 pip3 install tornado_xstatic
 pip3 install terminado
