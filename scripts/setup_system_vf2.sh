@@ -339,7 +339,6 @@ apt-get -y --no-install-recommends install a2jmidid
 #E: Couldn't find any package by glob 'python2.7-setuptools'
 
 # from bookwork-64bit script
-apt-get -y purge python3
 apt-get -y install python3
 apt-get -y install python3-dev
 apt-get -y install python3-venv
