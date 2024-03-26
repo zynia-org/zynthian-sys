@@ -532,7 +532,7 @@ cp -a $ZYNTHIAN_DATA_DIR/snapshots/* $ZYNTHIAN_MY_DATA_DIR/snapshots/000
 #Change Hostname
 if [ "$ZYNTHIAN_CHANGE_HOSTNAME" == "yes" ]; then
     echo "zynthian" > /etc/hostname
-    sed -i -e "s/127\.0\.1\.1.*$/127.0.1.1\tzynthian/" /etc/hosts
+    sed -i -e "s/127\.0\.1\.1.*$/127.0.1.1\tzynia/" /etc/hosts
 fi
 
 # Run configuration script
