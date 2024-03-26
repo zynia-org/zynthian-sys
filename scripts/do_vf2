@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /zynthian/zynthian-sys/scripts
+./setup_system_vf2.sh 2>&1 | tee /log/setup.log
