@@ -35,7 +35,7 @@ export ZYNTHIAN_WIFI_MODE="off"
 export SOUNDCARD_NAME="V5 ADAC"
 export SOUNDCARD_CONFIG="dtoverlay=hifiberry-dacplusadcpro\nforce_eeprom_read=0"
 export SOUNDCARD_MIXER="PGA_Gain_Left,PGA_Gain_Right,ADC_Left_Input,ADC_Right_Input,Digital_0,Digital_1,Headphone"
-export JACKD_OPTIONS="-P 70 -t 2000 -s -d alsa -d hw:sndrpihifiberry -S -r 44100 -p 256 -n 2 -X raw"
+export JACKD_OPTIONS="-P 70 -t 2000 -s -d alsa -d hw:StarfivePWMDACS -r 44100 -p 256 -n 2 -X raw"
 export ZYNTHIAN_DISABLE_RBPI_AUDIO="0"
 export ZYNTHIAN_RBPI_HEADPHONES="0"
 
@@ -48,7 +48,8 @@ export FRAMEBUFFER="/dev/fb0"
 export DISPLAY_KERNEL_OPTIONS="video=DSI-1:800x480@60,rotate=180"
 
 # Zynthian Wiring Config
-export ZYNTHIAN_WIRING_LAYOUT="V5"
+#export ZYNTHIAN_WIRING_LAYOUT="V5"
+export ZYNTHIAN_WIRING_LAYOUT="DUMMIES"
 export ZYNTHIAN_WIRING_ENCODER_A=""
 export ZYNTHIAN_WIRING_ENCODER_B=""
 export ZYNTHIAN_WIRING_SWITCHES=""
