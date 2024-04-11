@@ -1,13 +1,13 @@
 #!/bin/bash
 #******************************************************************************
 # ZYNTHIAN PROJECT: Zynthian Setup Script
-# 
-# Setup zynthian software stack in a fresh raspios-lite-64 "bullseye" image
-# 
+#
+# Setup zynthian software stack in a fresh vision five 2 "bookworm" image
+#
 # Copyright (C) 2015-2023 Fernando Moyano <jofemodo@zynthian.org>
 #
 #******************************************************************************
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation; either version 2 of
@@ -19,18 +19,19 @@
 # GNU General Public License for more details.
 #
 # For a full copy of the GNU General Public License see the LICENSE.txt file.
-# 
+#
 #******************************************************************************
 
 #------------------------------------------------------------------------------
 # Set default password & enable ssh on first boot
 #------------------------------------------------------------------------------
 
+# zynia 2024-04-10 Not sure this applies in vf2 case; commenting out for now
 # With the SDcard mounted in your computer
-cd /media/txino/bootfs
-echo -n "zyn:" > userconf.txt
-echo 'opensynth' | openssl passwd -6 -stdin >> userconf.txt
-touch ssh
+#cd /media/txino/bootfs
+#echo -n "zyn:" > userconf.txt
+#echo 'opensynth' | openssl passwd -6 -stdin >> userconf.txt
+#touch ssh
 
 #------------------------------------------------------------------------------
 # Load Environment Variables
@@ -226,9 +227,8 @@ apt-get -y --no-install-recommends install libeigen3-dev
 apt-get -y --no-install-recommends install libsamplerate-dev
 apt-get -y --no-install-recommends install libarmadillo-dev
 apt-get -y --no-install-recommends install libreadline-dev
-# zynia 2024-04-10 package not found for riscv or all in sid
-# available in devports
-#apt-get -y --no-install-recommends install lv2-c++-tools
+# zynia 2024-04-10 lv2-c++-tools only available in deb ports
+apt-get -y --no-install-recommends install lv2-c++-tools
 apt-get -y --no-install-recommends install libxi-dev
 apt-get -y --no-install-recommends install libgtk2.0-dev
 apt-get -y --no-install-recommends install libgtkmm-2.4-dev
@@ -244,15 +244,13 @@ apt-get -y --no-install-recommends install libxcursor-dev
 apt-get -y --no-install-recommends install libxinerama-dev
 apt-get -y --no-install-recommends install mesa-common-dev
 apt-get -y --no-install-recommends install libgl1-mesa-dev
-# zynia 2024-04-10 package not found for riscv or all in sid
-# available in devports
-#apt-get -y --no-install-recommends install libfreetype6-dev
+# zynia 2024-04-10 libfreetype6-dev not in sid; but libfreetype6-dev is; substituting
+apt-get -y --no-install-recommends install libfreetype-dev
 apt-get -y --no-install-recommends install libswscale-dev
 apt-get -y --no-install-recommends install qtbase5-dev
 apt-get -y --no-install-recommends install qtdeclarative5-dev
-# zynia 2024-04-10 package not found for riscv or all in sid
-# available in debports
-#apt-get -y --no-install-recommends install libcanberra-gtk-module
+# zynia 2024-04-10 libcanberra-gtk-module only available in debports
+apt-get -y --no-install-recommends install libcanberra-gtk-module
 apt-get -y --no-install-recommends install '^libxcb.*-dev'
 apt-get -y --no-install-recommends install libcanberra-gtk3-module
 apt-get -y --no-install-recommends install libxcb-cursor-dev
@@ -274,6 +272,7 @@ apt-get -y --no-install-recommends install libavformat-dev
 apt-get -y --no-install-recommends install libavcodec-dev
 apt-get -y --no-install-recommends install libgpiod-dev
 # zynia 2024-04-10 package not found for riscv or all in sid
+# zynia 2024-04-10 package in debports but many, many conflicts
 #apt-get -y --no-install-recommends install libganv-dev
 apt-get -y --no-install-recommends install libsdl2-dev
 apt-get -y --no-install-recommends install libibus-1.0-dev
