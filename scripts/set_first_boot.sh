@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# zynia 2024-04-10 Skip set_first_boot 
+exit 0
+
 # Stop zynthian services
 if [[ "$VIRTUALIZATION" == "none" ]]; then
 	echo "Stopping zynthian services..."
@@ -60,4 +63,4 @@ sleep 3
 sync
 
 # Power Off
-poweroff   
+poweroff
