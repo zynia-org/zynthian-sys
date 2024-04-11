@@ -69,7 +69,19 @@ source "zynthian_envars_extended.sh"
 #apt-get -y full-upgrade
 
 # Install required dependencies if needed
-apt-get -y install apt-utils apt-transport-https rpi-update sudo software-properties-common parted dirmngr rpi-eeprom gpgv wget
+apt-get -y install apt-utils
+apt-get -y install apt-transport-https
+# zynia 2024-04-10 rpi specific
+#apt-get -y install rpi-update
+apt-get -y install sudo
+# zynia 2024-04-10 many, many conflicts - removing to be safe
+#apt-get -y install software-properties-common
+apt-get -y install parted
+apt-get -y install dirmngr
+# zynia 2024-04-10 rpi specific
+#apt-get -y install rpi-eeprom
+apt-get -y install gpgv
+apt-get -y install wget
 
 # Update Firmware
 if [ "$ZYNTHIAN_INCLUDE_RPI_UPDATE" == "yes" ]; then
