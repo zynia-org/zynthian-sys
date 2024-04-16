@@ -22,6 +22,8 @@
 #
 #******************************************************************************
 
+set -x
+
 #------------------------------------------------------------------------------
 # Set default password & enable ssh on first boot
 #------------------------------------------------------------------------------
@@ -114,7 +116,8 @@ fi
 #echo "deb $sfizz_url_base/ /" | sudo tee /etc/apt/sources.list.d/home:sfztools:sfizz.list
 #curl -fsSL $sfizz_url_base/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_sfztools_sfizz.gpg > /dev/null
 
-apt-get -y update
+#apt-get -y update
+
 # zynia 2024-04-09 Do not do upgrades to avoid upgrading various vf2 things should not be upgraded
 #apt-get -y full-upgrade
 #apt-get -y autoremove
