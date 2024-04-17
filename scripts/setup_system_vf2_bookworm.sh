@@ -78,7 +78,8 @@ apt-get -y install apt-transport-https
 apt-get -y install sudo
 # zynia 2024-04-10 many, many conflicts - removing to be safe
 #apt-get -y install software-properties-common
-apt-get -y install parted
+# zynia 2024-04-16 Installing partd seems to cause lots of autoremoves - so removing
+#apt-get -y install parted
 apt-get -y install dirmngr
 # zynia 2024-04-10 rpi specific
 #apt-get -y install rpi-eeprom
@@ -131,7 +132,8 @@ apt-get -y remove --purge isc-dhcp-client
 apt-get -y remove --purge triggerhappy
 apt-get -y remove --purge logrotate
 apt-get -y remove --purge dphys-swapfile
-apt-get -y install systemd
+# zynia 2024-04-16 Systemd seems unneeded and has lots of issues
+#apt-get -y install systemd
 apt-get -y install avahi-daemon
 # zynia 2024-04-09 No dhcpcd-dbus in sid
 #apt-get -y install dhcpcd-dbus
@@ -358,6 +360,8 @@ apt-get -y --no-install-recommends install rubberband-cli
 apt-get -y install python3
 apt-get -y install python3-dev
 apt-get -y install python3-pip
+# zynia 2024-04-16 Need to add python3-venv
+apt-get -y install pythin3-venv
 apt-get -y install cython3
 apt-get -y install python3-cffi
 apt-get -y install 2to3
