@@ -362,6 +362,11 @@ apt-get -y install python3-dev
 apt-get -y install python3-pip
 # zynia 2024-04-16 Need to add python3-venv
 apt-get -y install python3-venv
+# zynia 2024-04-16 install xstatic stuff via apt vs pip as per experience
+#   with setup_system_vf2
+apt-get -y install python3-xstatic
+apt-get -y install python3-xstatic-term.js
+#
 apt-get -y install cython3
 apt-get -y install python3-cffi
 apt-get -y install 2to3
@@ -487,8 +492,9 @@ pip3 install tornadostreamform
 pip3 install websocket-client
 pip3 install tornado_xstatic
 pip3 install terminado
-pip3 install xstatic
-pip3 install XStatic_term.js
+# zynia 2024-04-16 moved to apt install based on experience with pre-bookworm setup_system_vf2
+#pip3 install xstatic
+#pip3 install XStatic_term.js
 
 #------------------------------------------------
 # System Adjustments
