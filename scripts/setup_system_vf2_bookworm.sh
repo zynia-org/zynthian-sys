@@ -132,9 +132,9 @@ apt-get -y remove --purge isc-dhcp-client
 apt-get -y remove --purge triggerhappy
 apt-get -y remove --purge logrotate
 apt-get -y remove --purge dphys-swapfile
-# zynia 2024-04-16 Systemd seems unneeded and has lots of issues
+# zynia 2024-04-16 Systemd and avahi-daemon updates seem unneeded and has lots of issues
 #apt-get -y install systemd
-apt-get -y install avahi-daemon
+#apt-get -y install avahi-daemon
 # zynia 2024-04-09 No dhcpcd-dbus in sid
 #apt-get -y install dhcpcd-dbus
 apt-get -y install usbutils
@@ -361,7 +361,7 @@ apt-get -y install python3
 apt-get -y install python3-dev
 apt-get -y install python3-pip
 # zynia 2024-04-16 Need to add python3-venv
-apt-get -y install pythin3-venv
+apt-get -y install python3-venv
 apt-get -y install cython3
 apt-get -y install python3-cffi
 apt-get -y install 2to3
