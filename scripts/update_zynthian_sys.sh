@@ -166,7 +166,7 @@ ZYNTHIAN_EPDF_HAT=$?
 # ***********************************************************************************
 
 #------------------------------------------------------------------------------
-# Escape Config Variables to replace
+# Escape/Fix Config Variables to replace
 #------------------------------------------------------------------------------
 
 FRAMEBUFFER_ESC=${FRAMEBUFFER//\//\\\/}
@@ -187,6 +187,14 @@ if [[ "$VIRTUALIZATION" == "none" ]]; then
 	RBPI_AUDIO_DEVICE=`$ZYNTHIAN_SYS_DIR/sbin/get_rbpi_audio_device.sh`
 else
 	RBPI_AUDIO_DEVICE="Headphones"
+fi
+
+# Fix V5 display config => It should be removed in the future
+if [[ "$DISPLAY_NAME" == "MIPI DSI 800x480 (inverted)" ]]; then
+	if [[ ( "$DISPLAY_CONFIG" == *"dtoverlay=rpi-ft5406"* ) ]]; then
+		DISPLAY_CONFIG="display_lcd_rotate=2"
+		sed -i -e "s/export DISPLAY_CONFIG=.*/export DISPLAY_CONFIG=\"$DISPLAY_CONFIG\"/" "$ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh"
+	fi
 fi
 
 #------------------------------------------------------------------------------
@@ -408,6 +416,7 @@ if [ -z "$NO_ZYNTHIAN_UPDATE" ]; then
 	cp -a $ZYNTHIAN_SYS_DIR/etc/modprobe.d/* /etc/modprobe.d
 	cp -an $ZYNTHIAN_SYS_DIR/etc/vim/* /etc/vim
 	cp -a $ZYNTHIAN_SYS_DIR/etc/update-motd.d/* /etc/update-motd.d
+	cp -an $ZYNTHIAN_SYS_DIR/etc/environment.d/* /etc/environment.d
 fi
 
 # Display zynthian info on ssh login
@@ -491,9 +500,24 @@ fi
 
 # Fix jackd parameters
 if [[ "$JACKD_OPTIONS" != *@(-X raw)* ]]; then
-  echo "Fixing jackd parameters ..."
+  echo "Fixing jackd MIDI parameters ..."
   echo "export JACKD_OPTIONS='$JACKD_OPTIONS -X raw'" >> /tmp/update_envars.sh
   update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+  set_reboot_flag
+fi
+if [[ "$JACKD_OPTIONS" != *@(-s -S)* ]]; then
+  echo "Fixing jackd latency parameters ..."
+  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-s/-s -S/" | sed -e "s/-S -r/-r/" >> /tmp/update_envars.sh
+  update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+  set_reboot_flag
+fi
+if [[ "$JACKD_OPTIONS" = *@(-t 2000)* ]]; then
+  echo "Fixing jackd timeout parameter ..."
+  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-t 2000 //" >> /tmp/update_envars.sh
+  update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
   set_reboot_flag
 fi
 

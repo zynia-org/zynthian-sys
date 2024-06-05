@@ -110,7 +110,7 @@ apt-get -y autoremove
 apt-get -y remove --purge isc-dhcp-client triggerhappy logrotate dphys-swapfile
 apt-get -y install systemd avahi-daemon dhcpcd-dbus usbutils udisks2 udevil exfatprogs \
 xinit xserver-xorg-video-fbdev x11-xserver-utils xinput libgl1-mesa-dri tigervnc-standalone-server \
-xfwm4 xfce4-panel xdotool cpufrequtils wpasupplicant wireless-tools iw hostapd dnsmasq \
+xfwm4 xfce4-panel xdotool cpufrequtils wpasupplicant wireless-tools iw dnsmasq \
 firmware-brcm80211 firmware-atheros firmware-realtek atmel-firmware firmware-misc-nonfree \
 shiki-colors-xfwm-theme fonts-freefont-ttf x11vnc xserver-xorg-input-evdev
 #firmware-ralink 
@@ -152,7 +152,7 @@ libsndfile1-zyndev
 # Tools
 apt-get -y --no-install-recommends install build-essential git swig pkg-config autoconf automake premake \
 subversion gettext intltool libtool libtool-bin cmake cmake-curses-gui flex bison ngrep qt5-qmake gobjc++ \
-ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband-cli
+ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband-cli faust
 
 # Missed tools from previous OS versions:
 #libjack-dev-session
@@ -163,7 +163,7 @@ ruby rake xsltproc vorbis-tools zenity doxygen graphviz glslang-tools rubberband
 apt-get -y install python3 python3-dev python3-pip cython3 python3-cffi 2to3 python3-tk python3-dbus python3-mpmath \
 python3-pil python3-pil.imagetk python3-setuptools python3-pyqt5 python3-numpy python3-evdev python3-usb \
 python3-soundfile python3-psutil python3-pexpect python3-jsonpickle python3-requests python3-mido python3-rtmidi \
-python3-mutagen pyliblo-utils  
+python3-mutagen
 
 # Python2 (DEPRECATED!!)
 #apt-get -y install python-setuptools python-is-python2 python-dev-is-python2
@@ -345,7 +345,7 @@ $ZYNTHIAN_SYS_DIR/scripts/set_first_boot.sh
 #$ZYNTHIAN_RECIPE_DIR/install_jack2.sh
 
 # Install pyliblo library (liblo OSC library for Python)
-#$ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
+$ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
 
 # Install mod-ttymidi (MOD's ttymidi version with jackd MIDI support)
 $ZYNTHIAN_RECIPE_DIR/install_mod-ttymidi.sh
@@ -376,8 +376,7 @@ $ZYNTHIAN_RECIPE_DIR/install_jack_capture.sh
 $ZYNTHIAN_RECIPE_DIR/install_jack-smf-utils.sh
 
 # Install touchosc2midi (TouchOSC Bridge)
-#$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
-# TODO FAILED=> build cython => Probably python 2.7 that must be upgraded
+$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
 
 # Install jackclient (jack-client python library)
 #$ZYNTHIAN_RECIPE_DIR/install_jackclient-python.sh

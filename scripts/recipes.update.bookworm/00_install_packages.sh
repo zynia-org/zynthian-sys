@@ -1,4 +1,6 @@
 
+source "$ZYNTHIAN_SYS_DIR/scripts/delayed_action_flags.sh"
+
 aptpkgs=""
 
 # -----------------------------------------------------------------------------
@@ -10,6 +12,12 @@ if [ -f "$ZYNTHIAN_CONFIG_DIR/patchlevel.txt" ]; then
 else
 	current_patchlevel="20240220.1"
 	echo "$current_patchlevel" > "$ZYNTHIAN_CONFIG_DIR/patchlevel.txt"
+fi
+
+# This should be removed in the next weeks ...
+# Fix typo in patchlevel => DISASTER!!!
+if [[ "$current_patchlevel" == "20240515.3" ]]; then
+	current_patchlevel="20240415.3"
 fi
 
 echo "CURRENT PATCH LEVEL: $current_patchlevel"
@@ -43,7 +51,7 @@ if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	echo "APPLYING PATCH $patchlevel ..."
 	apt -y remove x42-plugins
 	apt -y install fonts-freefont-ttf libglu-dev libftgl-dev
-	$ZYNTHIAN_RECIPE_DIR/install_x42_plugins.sh
+	#$ZYNTHIAN_RECIPE_DIR/install_x42_plugins.sh => It's done in 20240501
 fi
 
 patchlevel="20240222.2"
@@ -145,8 +153,132 @@ patchlevel="20240409.1"
 if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	echo "APPLYING PATCH $patchlevel ..."
 	aptpkgs="$aptpkgs shiro-plugins safe-plugins sorcer"
+fi
+
+patchlevel="20240416.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	#rm -rf $ZYNTHIAN_PLUGINS_DIR/lv2/sooperlooper.lv2
+	rm -rf $ZYNTHIAN_PLUGINS_DIR/lv2/b_synth.lv2
+	rm -rf $ZYNTHIAN_PLUGINS_DIR/lv2/Pianoteq*.lv2
+	rm -rf $ZYNTHIAN_MY_DATA_DIR/presets/lv2/Pianoteq*
+fi
+
+patchlevel="20240416.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove avldrums.lv2 avldrums.lv2-data
+	$ZYNTHIAN_RECIPE_DIR/install_avldrums.sh
+fi
+
+patchlevel="20240419.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_mimi.sh
 	cd $ZYNTHIAN_UI_DIR/zyngine
 	./zynthian_lv2.py engines
+	./zynthian_lv2.py presets https://butoba.net/homepage/mimid.html
+	set_restart_ui_flag
+fi
+
+patchlevel="20240419.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_surge_xt_prebuilt.sh
+	set_restart_ui_flag
+fi
+
+patchlevel="20240421.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_monique_monosynth_prebuilt.sh
+	set_restart_ui_flag
+fi
+
+patchlevel="20240421.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	mkdir "/root/.Surge XT"
+	$ZYNTHIAN_RECIPE_DIR/install_odin2_prebuilt.sh
+	set_restart_ui_flag
+fi
+
+patchlevel="20240422.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	SKIP_WARNING=1 rpi-update
+fi
+
+patchlevel="20240423.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	rm -f $ZYNTHIAN_DATA_DIR/soundfonts/sf2/*\**
+fi
+
+patchlevel="20240501.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_x42_plugins.sh
+fi
+
+patchlevel="20240501.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y install faust
+	$ZYNTHIAN_RECIPE_DIR/install_faust_lv2.sh
+fi
+
+patchlevel="20240504.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	rm -rf /etc/systemd/system/bluetooth.service.d
+fi
+
+patchlevel="20240504.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove hostapd
+	#systemctl disable avahi-daemon
+	#systemctl stop avahi-daemon
+fi
+
+patchlevel="20240508.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	systemctl enable avahi-daemon
+	systemctl start avahi-daemon
+fi
+
+patchlevel="20240517.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove surge
+fi
+
+patchlevel="20240522.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_jackrtpmidid.sh
+fi
+
+patchlevel="20240522.2"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_aeolus.sh
+fi
+
+patchlevel="20240525.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	rm /zynthian/zynthian-my-data/presets/aeolus.json
+fi
+
+patchlevel="20240526.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove pyliblo-utils
+	$ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
+	$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
 fi
 
 # 2024-01-08: Install alsa-midi (chain_manager)
@@ -211,5 +343,6 @@ apt -y autoclean
 #apt install --reinstall raspberrypi-bootloader raspberrypi-kernel
 
 # Update firmware to a recent version that works OK
-#sudo rpi-update rpi-6.1.y
+#SKIP_WARNING=1 rpi-update rpi-6.1.y
+#SKIP_WARNING=1 rpi-update rpi-6.6.y
 

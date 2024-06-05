@@ -39,7 +39,7 @@ mkdir $ZYNTHIAN_PLUGINS_SRC_DIR
 # Install LV2 Plugins from repository
 #------------------------------------------------
 
-apt-get -y install abgate adlplug amsynth ams-lv2 arctican-plugins-lv2 artyfx avldrums.lv2 \
+apt-get -y install abgate adlplug amsynth ams-lv2 arctican-plugins-lv2 artyfx \
 bchoppr beatslash-lv2 blop-lv2 bsequencer bshapr bslizr calf-plugins caps-lv2 cv-lfo-blender-lv2 \
 drumkv1-lv2 distrho-plugin-ports-lv2 dpf-plugins dragonfly-reverb drmr drowaudio-plugins-lv2 drumgizmo \
 easyssp-lv2 eq10q fabla g2reverb geonkick gxplugins gxvoxtonebender helm hybridreverb2 \
@@ -113,6 +113,9 @@ $ZYNTHIAN_RECIPE_DIR/install_qmidiarp.sh
 $ZYNTHIAN_RECIPE_DIR/install_mod-cabsim-IR-loader.sh
 $ZYNTHIAN_RECIPE_DIR/install_bolliedelay.sh
 $ZYNTHIAN_RECIPE_DIR/install_talentedhack.sh
+$ZYNTHIAN_RECIPE_DIR/install_mimi.sh
+$ZYNTHIAN_RECIPE_DIR/install_avldrums.sh
+
 
 # We should install only the included presets ...
 # $ZYNTHIAN_RECIPE_DIR/install_surge_prebuilt.sh
@@ -131,3 +134,12 @@ $ZYNTHIAN_RECIPE_DIR/fixup_amsynth.sh
 # Install MOD-UI skins
 #$ZYNTHIAN_RECIPE_DIR/postinstall_mod-lv2-data.sh
 
+# Remove VSTs and other plugin format we don't need and take a lot of space
+rm -rf /usr/lib/vst
+rm -rf /usr/lib/dssi
+rm -rf /usr/lib/ladspa
+rm -rf /usr/local/lib/vst
+rm -rf /usr/local/lib/dssi
+rm -rf /usr/local/lib/ladspa
+rm -rf /usr/lib/lsp-plugins
+rm -f /usr/bin/lsp-*
