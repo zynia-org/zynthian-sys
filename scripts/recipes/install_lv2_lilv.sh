@@ -70,7 +70,8 @@ cd build
 
 #Configure the python destination directory
 rm -rf /usr/local/lib/python3
-python_dir=`find /usr/local/lib -type d -iname python3* | head -n 1`
+python_ver=$(python3 --version | sed 's/^.*\(3.[0-9]*\)\..*$/\1/')
+python_dir="/usr/local/lib/python${python_ver}"
 meson configure -Dpython.purelibdir="$python_dir/dist-packages"
 
 meson compile
