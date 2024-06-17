@@ -314,7 +314,9 @@ apt-get -y --no-install-recommends install libxxf86vm-dev
 apt-get -y --no-install-recommends install libglu-dev
 apt-get -y --no-install-recommends install libftgl-dev
 # zynia 2024-04-10 package not found for riscv or all in sid
+# zynia 2024-06-16 Added libsndfile1-dev instead
 #apt-get -y --no-install-recommends install libsndfile1-zyndev
+apt-get -y --no-install-recommends install libsndfile1-dev
 
 # note: 2024-04-10 commented out in original script
 # Missed libs from previous OS versions:
