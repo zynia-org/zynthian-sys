@@ -396,6 +396,12 @@ apt-get -y install pyliblo-utils
 # Python2 (DEPRECATED!!)
 #apt-get -y install python-setuptools python-is-python2 python-dev-is-python2
 
+# zynia 2024-06-16 Added to handle issues with cmake and openssl/curl
+#  Set LD_LIBRARY_PATH as expected
+#
+export LD_LIBRARY_PATH=/lib/riscv64-linux-gnu:/usr/local/lib
+
+
 #------------------------------------------------
 # Create Zynthian Directory Tree
 # Install Zynthian Software from repositories
