@@ -30,36 +30,6 @@ source "$ZYNTHIAN_SYS_DIR/scripts/zynthian_envars_extended.sh"
 source "$ZYNTHIAN_SYS_DIR/scripts/delayed_action_flags.sh"
 
 #------------------------------------------------------------------------------
-# Detect legacy stable prior to 2211/2210 and block branches, avoiding update.
-#------------------------------------------------------------------------------
-
-if [[ "$VIRTUALIZATION" == "none" ]] && [[ -n "$ZYNTHIAN_OS_VERSION" ]] && [[ "$ZYNTHIAN_OS_VERSION" < "2209" ]]; then
-	echo "Blocking legacy stable 2109..."
-	cd $ZYNTHIAN_UI_DIR
-	git fetch
-	git checkout .
-	git checkout stable-2109
-	cd $ZYNTHIAN_DIR/zyncoder
-	git fetch
-	git checkout .
-	git checkout stable-2109
-	cd $ZYNTHIAN_DIR/zynthian-webconf
-	git fetch
-	git checkout .
-	git checkout stable-2109
-	cd $ZYNTHIAN_DATA_DIR
-	git fetch
-	git checkout .
-	git checkout stable-2109
-	cd $ZYNTHIAN_SYS_DIR
-	git fetch
-	git checkout .
-	git checkout stable-2109
-	update_zynthian_sys.sh
-	exit
-fi
-
-#------------------------------------------------------------------------------
 
 echo "Updating System configuration..."
 
@@ -101,7 +71,6 @@ function custom_config {
 	fi
 }
 
-
 function display_custom_config {
 	custom_config "$1"
 
@@ -122,7 +91,6 @@ function display_custom_config {
 	fi
 }
 
-
 #------------------------------------------------------------------------------
 # Default Values for some Config Variables
 #------------------------------------------------------------------------------
@@ -138,21 +106,11 @@ else
 fi
 
 if [ -z "$JACKD_OPTIONS" ]; then
-	export JACKD_OPTIONS="-P 70 -t 2000 -s -d alsa -d hw:0 -r 44100 -p 256 -n 2 -X raw"
+	export JACKD_OPTIONS="-P 70 -s -S -d alsa -d hw:0 -r 48000 -p 256 -n 2 -X raw"
 fi
 
 if [ -z "$ZYNTHIAN_AUBIONOTES_OPTIONS" ]; then
 	export ZYNTHIAN_AUBIONOTES_OPTIONS="-O complex -t 0.5 -s -88  -p yinfft -l 0.5"
-fi
-
-if [ -z "$ZYNTHIAN_HOSTSPOT_NAME" ]; then
-	export ZYNTHIAN_HOSTSPOT_NAME="zynthian"
-fi
-if [ -z "$ZYNTHIAN_HOSTSPOT_PASSWORD" ]; then
-	export ZYNTHIAN_HOSTSPOT_PASSWORD="raspberry"
-fi
-if [ -z "$ZYNTHIAN_HOSTSPOT_CHANNEL" ]; then
-	export ZYNTHIAN_HOSTSPOT_CHANNEL="0"
 fi
 
 if [ -z "$BROWSEPY_ROOT" ]; then
@@ -166,24 +124,23 @@ ZYNTHIAN_EPDF_HAT=$?
 # ***********************************************************************************
 
 #------------------------------------------------------------------------------
-# Escape/Fix Config Variables to replace
+# Copy default envars file if needed...
 #------------------------------------------------------------------------------
 
-FRAMEBUFFER_ESC=${FRAMEBUFFER//\//\\\/}
-LV2_PATH_ESC=${LV2_PATH//\//\\\/}
-ZYNTHIAN_DIR_ESC=${ZYNTHIAN_DIR//\//\\\/}
-ZYNTHIAN_CONFIG_DIR_ESC=${ZYNTHIAN_CONFIG_DIR//\//\\\/}
-ZYNTHIAN_SYS_DIR_ESC=${ZYNTHIAN_SYS_DIR//\//\\\/}
-ZYNTHIAN_UI_DIR_ESC=${ZYNTHIAN_UI_DIR//\//\\\/}
-ZYNTHIAN_SW_DIR_ESC=${ZYNTHIAN_SW_DIR//\//\\\/}
-BROWSEPY_ROOT_ESC=${BROWSEPY_ROOT//\//\\\/}
+if [ ! -f "$ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh" ]; then
+	cp -a $ZYNTHIAN_SYS_DIR/scripts/zynthian_envars.sh $ZYNTHIAN_CONFIG_DIR
+fi
 
-JACKD_BIN_PATH_ESC=${JACKD_BIN_PATH//\//\\\/}
-JACKD_OPTIONS_ESC=${JACKD_OPTIONS//\//\\\/}
-ZYNTHIAN_AUBIONOTES_OPTIONS_ESC=${ZYNTHIAN_AUBIONOTES_OPTIONS//\//\\\/}
-ZYNTHIAN_CUSTOM_BOOT_CMDLINE=${ZYNTHIAN_CUSTOM_BOOT_CMDLINE//\n//}
+#------------------------------------------------------------------------------
+# Fix Config Variables
+#------------------------------------------------------------------------------
 
-if [[ "$VIRTUALIZATION" == "none" ]]; then
+if [ "$VIRTUALIZATION" == "none" ]; then
+	# Fix ALSA Mixer settings
+	$ZYNTHIAN_SYS_DIR/sbin/fix_alsamixer_settings.sh
+	# Fix Soundcard Mixer Control List
+	$ZYNTHIAN_SYS_DIR/sbin/fix_soundcard_mixer_ctrls.py
+	# Get RBPI audio device
 	RBPI_AUDIO_DEVICE=`$ZYNTHIAN_SYS_DIR/sbin/get_rbpi_audio_device.sh`
 else
 	RBPI_AUDIO_DEVICE="Headphones"
@@ -197,12 +154,78 @@ if [[ "$DISPLAY_NAME" == "MIPI DSI 800x480 (inverted)" ]]; then
 	fi
 fi
 
+# Fix jackd parameters
+if [[ "$JACKD_OPTIONS" != *@(-X raw)* ]]; then
+  echo "Fixing jackd MIDI parameters ..."
+  echo "export JACKD_OPTIONS='$JACKD_OPTIONS -X raw'" >> /tmp/update_envars.sh
+  update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+  set_reboot_flag
+fi
+if [[ "$JACKD_OPTIONS" != *@(-s -S)* ]]; then
+  echo "Fixing jackd latency parameters ..."
+  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-s/-s -S/" | sed -e "s/-S -r/-r/" >> /tmp/update_envars.sh
+  update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+  set_reboot_flag
+fi
+if [[ "$JACKD_OPTIONS" = *@(-t 2000)* ]]; then
+  echo "Fixing jackd timeout parameter ..."
+  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-t 2000 //" >> /tmp/update_envars.sh
+  update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+  set_reboot_flag
+fi
+if [[ "$RBPI_VERSION_NUMBER" > "4" && "$SOUNDCARD_CONFIG" != "" && "$JACKD_OPTIONS" = *@(-p 256 -n 2)* ]]; then
+  echo "Fixing jackd options to work with RPi5 ..."
+  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-p 256 -n 2/-p 128 -n 2 -i 2 -o 2/" >> /tmp/update_envars.sh
+  update_envars.py /tmp/update_envars.sh no_update_sys
+  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+  set_reboot_flag
+fi
+
+#------------------------------------------------------------------------------
+# Escape/Fix Config Variables to replace
+#------------------------------------------------------------------------------
+
+FRAMEBUFFER_ESC=${FRAMEBUFFER//\//\\\/}
+ZYNTHIAN_DIR_ESC=${ZYNTHIAN_DIR//\//\\\/}
+ZYNTHIAN_CONFIG_DIR_ESC=${ZYNTHIAN_CONFIG_DIR//\//\\\/}
+ZYNTHIAN_SYS_DIR_ESC=${ZYNTHIAN_SYS_DIR//\//\\\/}
+ZYNTHIAN_UI_DIR_ESC=${ZYNTHIAN_UI_DIR//\//\\\/}
+ZYNTHIAN_SW_DIR_ESC=${ZYNTHIAN_SW_DIR//\//\\\/}
+BROWSEPY_ROOT_ESC=${BROWSEPY_ROOT//\//\\\/}
+
+JACKD_BIN_PATH_ESC=${JACKD_BIN_PATH//\//\\\/}
+JACKD_OPTIONS_ESC=${JACKD_OPTIONS//\//\\\/}
+ZYNTHIAN_AUBIONOTES_OPTIONS_ESC=${ZYNTHIAN_AUBIONOTES_OPTIONS//\//\\\/}
+ZYNTHIAN_CUSTOM_BOOT_CMDLINE=${ZYNTHIAN_CUSTOM_BOOT_CMDLINE//\n//}
+
+# Generate a good LV2 path
+if [ ${MACHINE_HW_NAME} = "armv7l" ]; then
+	arch_libdir="arm-linux-gnueabih"
+elif [ ${MACHINE_HW_NAME} = "aarch64" ]; then
+	arch_libdir="aarch64-linux-gnu"
+fi
+LV2_PATH="/usr/lib/lv2:/usr/lib/$arch_libdir/lv2:/usr/local/lib/lv2:/usr/local/lib/$arch_libdir/lv2:$ZYNTHIAN_PLUGINS_DIR/lv2:$ZYNTHIAN_DATA_DIR/presets/lv2:$ZYNTHIAN_MY_DATA_DIR/presets/lv2"
+LV2_PATH_ESC=${LV2_PATH//\//\\\/}
+sed -i -e "s/^export LV2_PATH\=.*$/export LV2_PATH=\"$LV2_PATH_ESC\"/" $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
+
 #------------------------------------------------------------------------------
 # Boot Config 
 #------------------------------------------------------------------------------
 
 BOOT_CONFIG_FPATH="/boot/firmware/config.txt"
 CMDLINE_CONFIG_FPATH="/boot/firmware/cmdline.txt"
+ROOT=root=/dev/mmcblk0p2
+for token in `cat $CMDLINE_CONFIG_FPATH`
+do
+  if [[ $token == root=* ]]
+  then
+    ROOT=$token
+    break
+  fi
+done
 
 # Detect NO_ZYNTHIAN_UPDATE flag in the config.txt
 if [ -f "$BOOT_CONFIG_FPATH" ] && [ -z "$NO_ZYNTHIAN_UPDATE" ]; then
@@ -211,7 +234,7 @@ fi
 
 if [ -z "$NO_ZYNTHIAN_UPDATE" ]; then
 	# Generate cmdline.txt
-  cmdline="root=/dev/mmcblk0p2 rootfstype=ext4 fsck.repair=yes rootwait"
+  cmdline="$ROOT rootfstype=ext4 fsck.repair=yes rootwait"
 
 	if [ "$ZYNTHIAN_LIMIT_USB_SPEED" == "1" ]; then
 		echo "USB SPEED LIMIT ENABLED"
@@ -239,11 +262,14 @@ if [ -z "$NO_ZYNTHIAN_UPDATE" ]; then
 
 	echo "OVERCLOCKING => $ZYNTHIAN_OVERCLOCKING"
 	if [[ "$ZYNTHIAN_OVERCLOCKING" == "Maximum" ]]; then
-		sed -i -e "s/#OVERCLOCKING_RBPI4#/over_voltage=6\narm_freq=2000/g" "$BOOT_CONFIG_FPATH"
+		sed -i -e "s/#OVERCLOCKING_RBPI4#/over_voltage_delta=50000\narm_freq=2000/g" "$BOOT_CONFIG_FPATH"
+		sed -i -e "s/#OVERCLOCKING_RBPI5#/over_voltage_delta=50000\narm_freq=3000/g" "$BOOT_CONFIG_FPATH"
 	elif [[ "$ZYNTHIAN_OVERCLOCKING" == "Medium" ]]; then
-		sed -i -e "s/#OVERCLOCKING_RBPI4#/over_voltage=2\narm_freq=1750/g" "$BOOT_CONFIG_FPATH"
+		sed -i -e "s/#OVERCLOCKING_RBPI4#/over_voltage_delta=20000\narm_freq=1750/g" "$BOOT_CONFIG_FPATH"
+		sed -i -e "s/#OVERCLOCKING_RBPI5#/over_voltage_delta=20000\narm_freq=2700/g" "$BOOT_CONFIG_FPATH"
 	else
 		sed -i -e "s/#OVERCLOCKING_RBPI4#//g" "$BOOT_CONFIG_FPATH"
+		sed -i -e "s/#OVERCLOCKING_RBPI5#//g" "$BOOT_CONFIG_FPATH"
 	fi
 
 	if [[ "$ZYNTHIAN_DISABLE_RBPI_AUDIO" != "1" ]]; then
@@ -493,36 +519,6 @@ fi
 soundcard_config_custom_dir="$ZYNTHIAN_SYS_DIR/custom/soundcard/$SOUNDCARD_NAME"
 if [ -d "$soundcard_config_custom_dir" ]; then
 	custom_config "$soundcard_config_custom_dir"
-fi
-
-if [ "$VIRTUALIZATION" == "none" ]; then
-	# Fix ALSA Mixer settings
-	$ZYNTHIAN_SYS_DIR/sbin/fix_alsamixer_settings.sh
-	# Fix Soundcard Mixer Control List
-	$ZYNTHIAN_SYS_DIR/sbin/fix_soundcard_mixer_ctrls.py
-fi
-
-# Fix jackd parameters
-if [[ "$JACKD_OPTIONS" != *@(-X raw)* ]]; then
-  echo "Fixing jackd MIDI parameters ..."
-  echo "export JACKD_OPTIONS='$JACKD_OPTIONS -X raw'" >> /tmp/update_envars.sh
-  update_envars.py /tmp/update_envars.sh no_update_sys
-  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
-  set_reboot_flag
-fi
-if [[ "$JACKD_OPTIONS" != *@(-s -S)* ]]; then
-  echo "Fixing jackd latency parameters ..."
-  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-s/-s -S/" | sed -e "s/-S -r/-r/" >> /tmp/update_envars.sh
-  update_envars.py /tmp/update_envars.sh no_update_sys
-  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
-  set_reboot_flag
-fi
-if [[ "$JACKD_OPTIONS" = *@(-t 2000)* ]]; then
-  echo "Fixing jackd timeout parameter ..."
-  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-t 2000 //" >> /tmp/update_envars.sh
-  update_envars.py /tmp/update_envars.sh no_update_sys
-  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
-  set_reboot_flag
 fi
 
 # Replace config vars in Systemd service files

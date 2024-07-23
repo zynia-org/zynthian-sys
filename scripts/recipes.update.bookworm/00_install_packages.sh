@@ -126,14 +126,14 @@ if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	aptpkgs="$aptpkgs sooperlooper"
 fi
 
-patchlevel="20240325.1"
-if [[ "$current_patchlevel" < "$patchlevel" ]]; then
-	echo "APPLYING PATCH $patchlevel ..."
-	cd $ZYNTHIAN_UI_DIR/zyngine
-	./zynthian_lv2.py presets https://github.com/michaelwillis/dragonfly-reverb
-	./zynthian_lv2.py presets urn:dragonfly:plate
-	./zynthian_lv2.py presets urn:dragonfly:room
-fi
+#patchlevel="20240325.1"
+#if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+#	echo "APPLYING PATCH $patchlevel ..."
+#	cd $ZYNTHIAN_UI_DIR/zyngine
+#	./zynthian_lv2.py presets https://github.com/michaelwillis/dragonfly-reverb
+#	./zynthian_lv2.py presets urn:dragonfly:plate
+#	./zynthian_lv2.py presets urn:dragonfly:room
+#fi
 
 patchlevel="20240325.2"
 if [[ "$current_patchlevel" < "$patchlevel" ]]; then
@@ -171,15 +171,15 @@ if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	$ZYNTHIAN_RECIPE_DIR/install_avldrums.sh
 fi
 
-patchlevel="20240419.1"
-if [[ "$current_patchlevel" < "$patchlevel" ]]; then
-	echo "APPLYING PATCH $patchlevel ..."
-	$ZYNTHIAN_RECIPE_DIR/install_mimi.sh
-	cd $ZYNTHIAN_UI_DIR/zyngine
-	./zynthian_lv2.py engines
-	./zynthian_lv2.py presets https://butoba.net/homepage/mimid.html
-	set_restart_ui_flag
-fi
+#patchlevel="20240419.1"
+#if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+#	echo "APPLYING PATCH $patchlevel ..."
+#	$ZYNTHIAN_RECIPE_DIR/install_mimi.sh
+#	cd $ZYNTHIAN_UI_DIR/zyngine
+#	./zynthian_lv2.py engines
+#	./zynthian_lv2.py presets https://butoba.net/homepage/mimid.html
+#	set_restart_ui_flag
+#fi
 
 patchlevel="20240419.2"
 if [[ "$current_patchlevel" < "$patchlevel" ]]; then
@@ -255,6 +255,15 @@ if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	apt -y remove surge
 fi
 
+patchlevel="20240521.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	if [[ "$ZYNTHIAN_OS_VERSION" == "2403" ]]; then
+		echo "Bump ZynthianOS version to 2405"
+		echo "2405" > /etc/zynthianos_version
+	fi
+fi
+
 patchlevel="20240522.1"
 if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	echo "APPLYING PATCH $patchlevel ..."
@@ -279,6 +288,77 @@ if [[ "$current_patchlevel" < "$patchlevel" ]]; then
 	apt -y remove pyliblo-utils
 	$ZYNTHIAN_RECIPE_DIR/install_pyliblo.sh
 	$ZYNTHIAN_RECIPE_DIR/install_touchosc2midi.sh
+fi
+
+patchlevel="20240528.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_mimi.sh
+	cd $ZYNTHIAN_UI_DIR/zyngine
+	./zynthian_lv2.py engines
+	./zynthian_lv2.py presets https://butoba.net/homepage/mimid.html
+	set_restart_ui_flag
+fi
+
+#patchlevel="20240604.1"
+#if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+#	echo "APPLYING PATCH $patchlevel ..."
+#	pip3 install hwmon vcgencmd
+#fi
+
+patchlevel="20240610.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	if [ ! -d "$ZYNTHIAN_SW_DIR/noVNC" ]; then
+		$ZYNTHIAN_RECIPE_DIR/install_noVNC.sh
+	fi
+fi
+
+patchlevel="20240611.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	apt -y remove bluez
+	aptpkgs="$aptpkgs zynbluez"
+	#apt -y install libical-dev docutils-common
+	#$ZYNTHIAN_RECIPE_DIR/install_bluez.sh
+fi
+
+patchlevel="20240613.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	aptpkgs="$aptpkgs python3-pam"
+fi
+
+patchlevel="20240616.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	$ZYNTHIAN_RECIPE_DIR/install_aidax.sh
+fi
+
+patchlevel="20240626.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	if [[ "$ZYNTHIAN_OS_VERSION" == "2405" ]]; then
+		echo "Bump ZynthianOS version to 2406"
+		echo "2406" > /etc/zynthianos_version
+		# Update build date, forgot in last image ;-)
+		ts=$(stat "/zynthian/zynthian-sw/noVNC" -c %w | cut -d " " -f 1,2)
+		if [[ "$ts" == "2024-06-25 17:06:50.074846744" ]]; then
+			sed -i "s/2024-05-21/2024-06-25/" $ZYNTHIAN_DIR/build_info.txt
+		fi
+	fi
+	if [ -f "$ZYNTHIAN_SW_DIR/plugins/AIDA-X-1.1.0-linux-arm64.tar.xz" ]; then
+		rm -f "$ZYNTHIAN_SW_DIR/plugins/AIDA-X-1.1.0-linux-arm64.tar.xz"
+	fi
+fi
+
+patchlevel="20240626.1"
+if [[ "$current_patchlevel" < "$patchlevel" ]]; then
+	echo "APPLYING PATCH $patchlevel ..."
+	cd $ZYNTHIAN_UI_DIR/zyngine
+	./zynthian_lv2.py presets https://github.com/michaelwillis/dragonfly-reverb
+	./zynthian_lv2.py presets urn:dragonfly:plate
+	./zynthian_lv2.py presets urn:dragonfly:room
 fi
 
 # 2024-01-08: Install alsa-midi (chain_manager)
