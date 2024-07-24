@@ -222,7 +222,8 @@ apt-get -y --no-install-recommends install dssi-dev
 apt-get -y --no-install-recommends install libjpeg-dev
 apt-get -y --no-install-recommends install libxpm-dev
 apt-get -y --no-install-recommends install libcairo2-dev
-apt-get -y --no-install-recommends install libglu1-mesa-dev
+# zynia 2024-07-24 Trying to keep mesa from updating
+#apt-get -y --no-install-recommends install libglu1-mesa-dev
 apt-get -y --no-install-recommends install libasound2-dev
 apt-get -y --no-install-recommends install dbus-x11
 apt-get -y --no-install-recommends install jackd2
@@ -259,8 +260,9 @@ apt-get -y --no-install-recommends install libzita-resampler-dev
 apt-get -y --no-install-recommends install fonts-roboto
 apt-get -y --no-install-recommends install libxcursor-dev
 apt-get -y --no-install-recommends install libxinerama-dev
-apt-get -y --no-install-recommends install mesa-common-dev
-apt-get -y --no-install-recommends install libgl1-mesa-dev
+# zynia 2024-07-24 Trying to keep mesa from updating
+#apt-get -y --no-install-recommends install mesa-common-dev
+#apt-get -y --no-install-recommends install libgl1-mesa-dev
 # zynia 2024-04-10 libfreetype6-dev not in sid; but libfreetype6-dev is; substituting
 apt-get -y --no-install-recommends install libfreetype-dev
 apt-get -y --no-install-recommends install libswscale-dev
