@@ -1,8 +1,12 @@
 #!/bin/bash
 
-if [ -d lvtk ]; then
-	rm -rf lvtk
-fi
+
+
+source /zynthian/zynthian-sys/scripts/zynthian_envars_extended.sh
+
+#if [ -d lvtk ]; then
+#	rm -rf lvtk
+#fi
 
 # LVTK-1
 cd $ZYNTHIAN_SW_DIR
@@ -18,6 +22,18 @@ cd lvtk-1.2.0
 git clone https://github.com/lvtk/lvtk.git lvtk-1
 cd lvtk-1
 git checkout v1
+#
+#
+# 2024-08-12 waf in cloned repo fails due to NULLs in the comment the incorporates the waf library
+# Current versions of python do not allow NULLs anywhere in the source file
+# replacing with more current version of waf to handle this issue
+#
+mv waf waf-orig
+wget https://waf.io/waf-2.0.19
+chmod +x waf-2.0.19
+ln -s waf-2.0.19 waf
+#
+#
 ./waf configure
 ./waf build
 ./waf install
@@ -39,6 +55,7 @@ meson install
 cd ../..
 
 # pugl: needed for v3
+apt install -y sphinxygen
 if [ -d pugl ]; then
 	rm -rf pugl
 fi

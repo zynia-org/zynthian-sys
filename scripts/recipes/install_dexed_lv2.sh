@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -x
+
+source /zynthian/zynia/scripts/zynthian_envars_extended.sh
+
 cd $ZYNTHIAN_PLUGINS_SRC_DIR
 if [ -d "dexed.lv2" ]; then
 	rm -rf "dexed.lv2"
@@ -13,4 +17,4 @@ make -j 3
 make install
 cd ../..
 
-rm -rf "dexed.lv2"
+#rm -rf "dexed.lv2"
