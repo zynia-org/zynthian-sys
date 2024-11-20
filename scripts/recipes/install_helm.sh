@@ -2,6 +2,8 @@
 
 # helm
 
+if [ -z "${ZYNIA}" ]
+then
 . $ZYNTHIAN_RECIPE_DIR/_zynth_lib.sh
 
 cd $ZYNTHIAN_SW_DIR/plugins
@@ -20,4 +22,23 @@ if [ ${?} -ne 0 -o  "${build}" = "build" ]; then
 	zynth_build_request ready
 	make clean
 	cd ..
+fi
+
+else
+# Zynia 2024-09-17
+# Simplify build for riscv
+#
+cd $ZYNTHIAN_PLUGINS_DIR
+if [ -d helm ]
+then
+    rm -rf helm
+fi
+git clone https://github.com/mtytel/helm.git
+cd helm
+sed -i -e "s/SIMDFLAGS := -msse2/SIMDFLAGS :=/" Makefile
+make lv2
+cp -R builds/linux/LV2/helm.lv2 "${ZYNTHIAN_PLUGINS_DIR}"/lv2
+#make clean
+cd ..
+rm -rf helm
 fi

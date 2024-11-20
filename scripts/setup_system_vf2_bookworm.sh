@@ -506,6 +506,11 @@ pip3 install terminado
 #pip3 install xstatic
 #pip3 install XStatic_term.js
 
+# zynia 2024-09-10
+# Install python3.8 - needed by some install scripts the use an old version of waf
+"$ZYNTHIAN_RECIPE_DIR"/install_python38.sh
+
+
 #------------------------------------------------
 # System Adjustments
 #------------------------------------------------
