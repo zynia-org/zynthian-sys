@@ -11,10 +11,8 @@ git clone https://github.com/drobilla/patchage.git
 cd patchage
 meson setup build
 cd build
-meson compile
+meson compile -j 3
 meson install
-meson clean
-cd ..
-rm -rf build
-cd ..
-#rm -rf "patchage"
+
+cd ../..
+rm -rf "patchage"

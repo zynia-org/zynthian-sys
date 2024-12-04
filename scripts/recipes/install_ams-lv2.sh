@@ -1,11 +1,12 @@
 #!/bin/bash
 
 
-# zynia
 # 2024-09-10 need to run on Python <3.12 because waf in cloned repo uses
 # the imp module which has been removed in Python >=3.12.
 #
-source $ZYNTHIAN_DIR/venv38/bin/activate
+if [ $(python3 -c 'import sys; print(sys.version_info.minor)') > 8 ]; then
+    source $ZYNTHIAN_DIR/venv38/bin/activate
+fi
 
 # LV2 port of Alsa Modular Synth
 cd $ZYNTHIAN_PLUGINS_DIR

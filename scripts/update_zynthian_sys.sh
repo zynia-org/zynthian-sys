@@ -176,13 +176,6 @@ if [[ "$JACKD_OPTIONS" = *@(-t 2000)* ]]; then
   source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
   set_reboot_flag
 fi
-if [[ "$RBPI_VERSION_NUMBER" > "4" && "$SOUNDCARD_CONFIG" != "" && "$JACKD_OPTIONS" = *@(-p 256 -n 2)* ]]; then
-  echo "Fixing jackd options to work with RPi5 ..."
-  echo -e "export JACKD_OPTIONS=\"$JACKD_OPTIONS\"" | sed -e "s/-p 256 -n 2/-p 128 -n 2 -i 2 -o 2/" >> /tmp/update_envars.sh
-  update_envars.py /tmp/update_envars.sh no_update_sys
-  source $ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh
-  set_reboot_flag
-fi
 
 #------------------------------------------------------------------------------
 # Escape/Fix Config Variables to replace
@@ -250,11 +243,12 @@ if [ -z "$NO_ZYNTHIAN_UPDATE" ]; then
 	  cmdline="$cmdline $ZYNTHIAN_CUSTOM_BOOT_CMDLINE"
 	fi
 
-	if [[ "$FRAMEBUFFER" == "/dev/fb0" ]]; then
-		echo "BOOT LOG DISABLED"
-		cmdline="$cmdline console=tty3 logo.nologo quiet splash vt.global_cursor_default=0"
-	else
+	if [[ "$FRAMEBUFFER" == "/dev/fb1" || "$BOOTLOG" == "1" ]]; then
+		echo "BOOT LOG ENABLED"
 		cmdline="$cmdline console=tty1 logo.nologo"
+	else
+		echo "BOOT LOG DISABLED"
+		cmdline="$cmdline console=tty3 logo.nologo quiet loglevel=2 vt.global_cursor_default=0"
 	fi
 
   # Customize config.txt
@@ -352,9 +346,6 @@ cp -a $ZYNTHIAN_SYS_DIR/config/sidechain.json $ZYNTHIAN_CONFIG_DIR
 if [ -f "$ZYNTHIAN_CONFIG_DIR/backup_items.txt" ]; then
 	rm -f $ZYNTHIAN_CONFIG_DIR/backup_items.txt
 fi
-if [ -f "$ZYNTHIAN_CONFIG_DIR/zynthian_custom_config.sh" ]; then
-	rm -f $ZYNTHIAN_CONFIG_DIR/zynthian_custom_config.sh
-fi
 
 # Fix/Setup MIDI-profiles data directory
 cd $ZYNTHIAN_CONFIG_DIR
@@ -371,27 +362,11 @@ cd $ZYNTHIAN_CONFIG_DIR
 if [ ! -d "jalv" ]; then
 	mkdir "jalv"
 fi
-if [ -f "jalv_plugins.json" ]; then
-	mv "jalv_plugins.json" "jalv/plugins.json"
-	mv "all_jalv_plugins.json" "jalv/all_plugins.json"
-fi
-if [ ! -f "jalv/plugins.json" ]; then
-	cp "$ZYNTHIAN_SYS_DIR/config/default_jalv_plugins.json" "jalv/plugins.json"
-fi
 
-export ZYNTHIAN_PIANOTEQ_DIR="$ZYNTHIAN_SW_DIR/pianoteq6"
-# Setup Pianoteq binary
-if [ ! -L "$ZYNTHIAN_PIANOTEQ_DIR/pianoteq" ]; then
-	ln -s "$ZYNTHIAN_PIANOTEQ_DIR/Pianoteq 6 STAGE" "$ZYNTHIAN_PIANOTEQ_DIR/pianoteq"
-fi
-# Generate LV2 presets
-if [[ "$VIRTUALIZATION" == "none" ]]; then
-	ptq_version=$($ZYNTHIAN_PIANOTEQ_DIR/pianoteq --version | cut -d' ' -f4)
-	if [[ "$version" > "7.2.0" ]]; then
-		n_presets=$(find "$ZYNTHIAN_MY_DATA_DIR/presets/lv2" -name "Pianoteq 7 *-factory-presets*.lv2" -printf '.' | wc -m)
-		if [[ "$n_presets" == 0 ]]; then
-			$ZYNTHIAN_PIANOTEQ_DIR/pianoteq --export-lv2-presets $ZYNTHIAN_MY_DATA_DIR/presets/lv2
-		fi
+# Fix Pianoteq directory name
+if [[ ! -d "$ZYNTHIAN_SW_DIR/pianoteq" ]]; then
+	if [[ -d "$ZYNTHIAN_SW_DIR/pianoteq6" ]]; then
+		mv $ZYNTHIAN_SW_DIR/pianoteq6 $ZYNTHIAN_SW_DIR/pianoteq
 	fi
 fi
 # Setup Pianoteq User Presets Directory
@@ -404,28 +379,33 @@ fi
 # Setup Pianoteq Config files
 if [ ! -d "/root/.config/Modartt" ]; then
 	mkdir -p "/root/.config/Modartt"
-	cp $ZYNTHIAN_DATA_DIR/pianoteq6/*.prefs /root/.config/Modartt
+	cp $ZYNTHIAN_DATA_DIR/pianoteq/*.prefs /root/.config/Modartt
 fi
 # Setup Pianoteq MidiMappings
 if [ ! -d "/root/.config/Modartt/Pianoteq/MidiMappings" ]; then
 	mkdir -p "/root/.local/share/Modartt/Pianoteq/MidiMappings"
-	cp $ZYNTHIAN_DATA_DIR/pianoteq6/Zynthian.ptm /root/.local/share/Modartt/Pianoteq/MidiMappings
+	cp $ZYNTHIAN_DATA_DIR/pianoteq/Zynthian.ptm /root/.local/share/Modartt/Pianoteq/MidiMappings
 fi
 # Fix Pianoteq Presets Cache location
-if [ -d "$ZYNTHIAN_MY_DATA_DIR/pianoteq6" ]; then
-	mv "$ZYNTHIAN_MY_DATA_DIR/pianoteq6" $ZYNTHIAN_CONFIG_DIR
+if [ -d "$ZYNTHIAN_MY_DATA_DIR/pianoteq" ]; then
+	mv "$ZYNTHIAN_MY_DATA_DIR/pianoteq" $ZYNTHIAN_CONFIG_DIR
 fi
 # Setup browsepy directories
 if [ ! -d "$BROWSEPY_ROOT" ]; then
-     mkdir -p $BROWSEPY_ROOT
+	mkdir -p $BROWSEPY_ROOT
 fi
 # TODO create other directories and symlinks to existing file types in $ZYNTHIAN_MY_DATA_DIR
 if [ ! -d "$BROWSEPY_ROOT/Speaker Cabinets IRs" ]; then
-     mkdir -p "$BROWSEPY_ROOT/Speaker Cabinets IRs"
+	mkdir -p "$BROWSEPY_ROOT/Speaker Cabinets IRs"
 fi
 
 # Fix Aeolus config file: Remove unsupported "-J" option.
 sed -i -e "s/ \-J / /g" /etc/aeolus.conf
+
+# Migrate legacy touch-navigation flag (to remove!!)
+if [ -z "$ZYNTHIAN_UI_TOUCH_NAVIGATION" ]; then
+	sed -i -e "s/ZYNTHIAN_UI_ONSCREEN_BUTTONS/ZYNTHIAN_UI_TOUCH_NAVIGATION/g" "$ZYNTHIAN_CONFIG_DIR/zynthian_envars.sh"
+fi
 
 #--------------------------------------
 # System Config

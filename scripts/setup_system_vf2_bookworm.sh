@@ -292,6 +292,7 @@ apt-get -y --no-install-recommends install libavcodec-dev
 apt-get -y --no-install-recommends install libgpiod-dev
 # zynia 2024-04-10 package not found for riscv or all in sid
 # zynia 2024-04-10 package in debports but many, many conflicts
+# zynia 2024-12-03 use install_ganv.sh script instead (see below)
 #apt-get -y --no-install-recommends install libganv-dev
 apt-get -y --no-install-recommends install libsdl2-dev
 apt-get -y --no-install-recommends install libibus-1.0-dev
@@ -319,6 +320,8 @@ apt-get -y --no-install-recommends install libftgl-dev
 # zynia 2024-06-16 Added libsndfile1-dev instead
 #apt-get -y --no-install-recommends install libsndfile1-zyndev
 apt-get -y --no-install-recommends install libsndfile1-dev
+# zynia Added 2024-12-03 Needed by new install_ganv.sh recipe
+apt-get -y --no-install-recommends install libgirepository1.0-dev
 
 # note: 2024-04-10 commented out in original script
 # Missed libs from previous OS versions:
@@ -429,7 +432,7 @@ git clone -b "${ZYNTHIAN_ZYNCODER_BRANCH}" "${ZYNTHIAN_ZYNCODER_REPO}"
 
 # Zynthian UI
 cd "$ZYNTHIAN_DIR"
-git clone -b "${ZYNTHIAN_UI_BRANCH}" "${ZYNTHIAN_UI_REPO}"
+git clone -b 1"${ZYNTHIAN_UI_BRANCH}" "${ZYNTHIAN_UI_REPO}"
 cd "$ZYNTHIAN_UI_DIR"
 find ./zynlibs -type f -name build.sh -exec {} \;
 
@@ -667,6 +670,11 @@ $ZYNTHIAN_RECIPE_DIR/install_preset2lv2.sh
 # note: 2024-04-10 commented out in original script
 # Install QJackCtl
 #$ZYNTHIAN_RECIPE_DIR/install_qjackctl.sh
+
+# zynia 2024-12-03 no libganv-dev in debian packages (for sid)
+# zynia clone, build and install from github instead
+# zynia required by install_patchage.sh
+$ZYNTHIAN_RECIPE_DIR/install_ganv.sh
 
 # Install patchage
 $ZYNTHIAN_RECIPE_DIR/install_patchage.sh
